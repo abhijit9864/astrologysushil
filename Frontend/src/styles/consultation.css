@@ -1,0 +1,642 @@
+/* ============================================================
+   consultation.css  –  Trust-First Astrology Consultation Page
+   All classes prefixed cp- to prevent global CSS conflicts
+   ============================================================ */
+
+/* ── Page Shell ── */
+.cp-page {
+  background: var(--bg);
+  padding: 80px 20px 72px;
+  min-height: 100vh;
+}
+
+/* ── Shared Section Headings ── */
+.cp-section-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin: 0 0 10px;
+  text-align: center;
+}
+
+.cp-section-title {
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 12px;
+  text-align: center;
+}
+
+.cp-section-note {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  margin: 0 0 36px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ═══════════════════════════════════════
+   SECTION 1 — HERO
+═══════════════════════════════════════ */
+.cp-hero {
+  max-width: 680px;
+  margin: 0 auto 64px;
+  text-align: center;
+}
+
+.cp-badge {
+  display: inline-block;
+  padding: 7px 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  color: var(--primary);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.cp-hero-title {
+  font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.12;
+  margin: 0 0 18px;
+}
+
+.cp-hero-sub {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  line-height: 1.78;
+  margin: 0 0 36px;
+}
+
+.cp-hero-cta {
+  display: inline-block;
+  padding: 17px 44px;
+  background: #22c55e;
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 700;
+  border-radius: 14px;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 8px 32px rgba(34,197,94,0.25);
+}
+
+.cp-hero-cta:hover {
+  opacity: 0.9;
+  transform: translateY(-3px);
+}
+
+/* ═══════════════════════════════════════
+   SECTION 2 — INFO CARDS
+═══════════════════════════════════════ */
+.cp-info-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: 880px;
+  margin: 0 auto 64px;
+}
+
+.cp-info-card {
+  background: var(--card);
+  border: 1px solid #1e2d4a;
+  border-radius: 22px;
+  padding: 32px 28px;
+}
+
+.cp-info-icon {
+  font-size: 1.9rem;
+  margin-bottom: 14px;
+}
+
+.cp-info-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0 0 16px;
+}
+
+.cp-hours-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #1e2d4a;
+}
+
+.cp-hours-row:last-child {
+  border-bottom: none;
+}
+
+.cp-hours-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.cp-hours-time {
+  font-size: 0.95rem;
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
+.cp-info-desc {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.68;
+  margin: 0 0 16px;
+}
+
+.cp-info-location-tag {
+  display: inline-block;
+  background: rgba(212,175,55,0.1);
+  border: 1px solid rgba(212,175,55,0.25);
+  color: var(--primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 8px;
+}
+
+/* ═══════════════════════════════════════
+   SECTION 3 — HOW IT WORKS
+═══════════════════════════════════════ */
+.cp-how-section {
+  max-width: 1040px;
+  margin: 0 auto 64px;
+}
+
+.cp-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-top: 36px;
+  position: relative;
+}
+
+/* Connecting line between steps */
+.cp-steps::before {
+  content: "";
+  position: absolute;
+  top: 34px;
+  left: calc(12.5% + 4px);
+  right: calc(12.5% + 4px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #1e2d4a 20%, #1e2d4a 80%, transparent);
+  z-index: 0;
+}
+
+.cp-step {
+  background: var(--card);
+  border: 1px solid #1e2d4a;
+  border-radius: 20px;
+  padding: 28px 20px 24px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  transition: border-color 0.25s, transform 0.25s;
+}
+
+.cp-step:hover {
+  border-color: rgba(212,175,55,0.4);
+  transform: translateY(-4px);
+}
+
+.cp-step-num {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--bg);
+  font-size: 0.75rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cp-step-icon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+  margin-top: 6px;
+}
+
+.cp-step-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.cp-step-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════
+   DIVIDER CTA (before packages reveal)
+═══════════════════════════════════════ */
+.cp-divider-cta {
+  max-width: 520px;
+  margin: 0 auto 0;
+  text-align: center;
+  padding: 40px 28px 60px;
+  border-top: 1px solid #1e2d4a;
+}
+
+.cp-divider-text {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin: 0 0 20px;
+  line-height: 1.6;
+}
+
+.cp-divider-btn {
+  display: inline-block;
+  padding: 14px 36px;
+  border: 1.5px solid var(--primary);
+  background: transparent;
+  color: var(--primary);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  letter-spacing: 0.02em;
+}
+
+.cp-divider-btn:hover {
+  background: var(--primary);
+  color: var(--bg);
+  transform: translateY(-2px);
+}
+
+/* ═══════════════════════════════════════
+   SECTION 4 — PACKAGES
+═══════════════════════════════════════ */
+.cp-packages-section {
+  max-width: 880px;
+  margin: 0 auto 56px;
+  animation: cpFadeUp 0.45s ease both;
+}
+
+.cp-packages {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.cp-pkg-card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid #1e2d4a;
+  border-radius: 24px;
+  padding: 36px 28px 28px;
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  outline: none;
+}
+
+.cp-pkg-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(212,175,55,0.35);
+}
+
+.cp-pkg-card:focus-visible {
+  box-shadow: 0 0 0 2px var(--primary);
+}
+
+/* .cp-pkg-featured {
+  border-color: rgba(212,175,55,0.5);
+  background: linear-gradient(155deg, #0f1f3d 0%, var(--card) 100%);
+} */
+
+.cp-pkg-featured{
+  background:#0f172a;
+  color:white;
+  border:2px solid var(--primary);
+}
+
+.cp-pkg-featured .cp-pkg-price,
+.cp-pkg-featured .cp-pkg-name,
+.cp-pkg-featured li{
+  color:white;
+}
+
+.cp-pkg-selected {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 2px rgba(212,175,55,0.3), 0 14px 48px rgba(212,175,55,0.1);
+  transform: translateY(-6px);
+}
+
+.cp-pkg-badge {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary);
+  color: var(--bg);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 18px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.cp-pkg-tier {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--primary);
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.cp-pkg-price {
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 0 4px;
+  line-height: 1;
+}
+
+.cp-pkg-name {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  margin: 0 0 20px;
+}
+
+.cp-pkg-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+  border-top: 1px solid #1e2d4a;
+  padding-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cp-pkg-features li {
+  color: #cbd5e1;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.cp-pkg-select-indicator {
+  text-align: center;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #1e2d4a;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.cp-pkg-select-indicator.active {
+  background: rgba(212,175,55,0.12);
+  color: var(--primary);
+  border-color: rgba(212,175,55,0.4);
+}
+
+/* ═══════════════════════════════════════
+   SECTION 5 — FORM
+═══════════════════════════════════════ */
+.cp-form-wrapper {
+  max-width: 880px;
+  margin: 0 auto;
+  background: var(--card);
+  border: 1px solid #1e2d4a;
+  border-radius: 28px;
+  padding: 48px 44px;
+  animation: cpFadeUp 0.45s ease 0.1s both;
+}
+
+.cp-form-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.cp-form-heading {
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.cp-form-sub {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  margin: 0;
+}
+
+.cp-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.cp-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.cp-span2 {
+  grid-column: span 2;
+}
+
+.cp-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.cp-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--bg);
+  border: 1px solid #1e2d4a;
+  border-radius: 12px;
+  color: #e2e8f0;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.cp-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(212,175,55,0.08);
+}
+
+.cp-input::placeholder {
+  color: #334155;
+}
+
+.cp-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.5);
+  cursor: pointer;
+}
+
+/* Custom select arrow */
+select.cp-input {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 10 7'%3E%3Cpath fill='%23D4AF37' d='M5 7L0 0h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 9px;
+  padding-right: 42px;
+}
+
+.cp-textarea {
+  resize: vertical;
+  min-height: 118px;
+  line-height: 1.65;
+}
+
+.cp-submit-btn {
+  display: block;
+  width: 100%;
+  height: 56px;
+  border: none;
+  border-radius: 14px;
+  background: var(--primary);
+  color: var(--bg);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+  margin-top: 4px;
+}
+
+.cp-submit-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-2px);
+}
+
+.cp-submit-btn:active {
+  transform: translateY(0);
+}
+
+/* ── Success Popup ── */
+.cp-success-popup {
+  position: fixed;
+  top: 28px;
+  right: 28px;
+  background: #22c55e;
+  color: var(--text);
+  padding: 18px 24px;
+  border-radius: 16px;
+  z-index: 9999;
+  animation: cpSlideIn 0.3s ease;
+  box-shadow: 0 8px 30px rgba(34,197,94,0.3);
+}
+
+.cp-success-popup h3 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+}
+
+.cp-success-popup p {
+  margin: 0;
+  font-size: 0.88rem;
+  opacity: 0.9;
+}
+
+/* ── Keyframes ── */
+@keyframes cpSlideIn {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes cpFadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media (max-width: 900px) {
+  .cp-steps {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 18px;
+  }
+
+  .cp-steps::before {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .cp-page {
+    padding: 60px 16px 52px;
+  }
+
+  .cp-hero {
+    margin-bottom: 48px;
+  }
+
+  .cp-info-row {
+    grid-template-columns: 1fr;
+    margin-bottom: 48px;
+  }
+
+  .cp-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .cp-how-section {
+    margin-bottom: 48px;
+  }
+
+  .cp-packages {
+    grid-template-columns: 1fr;
+  }
+
+  .cp-packages-section {
+    margin-bottom: 40px;
+  }
+
+  .cp-form-wrapper {
+    padding: 28px 18px;
+  }
+
+  .cp-form {
+    grid-template-columns: 1fr;
+  }
+
+  .cp-span2 {
+    grid-column: span 1;
+  }
+
+  .cp-divider-cta {
+    padding: 32px 16px 48px;
+  }
+}

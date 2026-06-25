@@ -1,0 +1,58 @@
+.entry-page{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:var(--bg);
+  padding:20px;
+}
+
+.entry-card{
+  width:100%;
+  max-width:500px;
+
+  background:var(--card);
+
+  border:1px solid var(--border-color);
+
+  border-radius:25px;
+
+  padding:40px;
+}
+
+.entry-card h1{
+  color:var(--text);
+  text-align:center;
+  margin-bottom:10px;
+}
+
+.entry-card p{
+  color:var(--text-secondary);
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.entry-card form{
+  display:flex;
+  flex-direction:column;
+  gap:15px;
+}
+
+.entry-card input{
+  height:55px;
+  padding:0 15px;
+  border-radius:12px;
+  border:1px solid var(--border-color);
+  background:var(--bg-secondary);
+  color:var(--text);
+}
+
+.entry-card button{
+  height:55px;
+  border:none;
+  border-radius:12px;
+  background:#22c55e;
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+}

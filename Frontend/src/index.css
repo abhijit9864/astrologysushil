@@ -1,0 +1,28 @@
+@import "tailwindcss";
+@import "./styles/theme.css";
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+  background: var(--bg);
+  color: var(--text);
+
+  font-family: "Poppins", sans-serif;
+
+  transition: all 0.3s ease;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text);
+}
+
+p {
+  color: var(--text-secondary);
+}
