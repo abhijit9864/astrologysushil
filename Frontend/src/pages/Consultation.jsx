@@ -155,20 +155,20 @@ Description: ${formData.description}
                         <p className="cp-section-eyebrow">Choose Your Plan</p>
                         <h2 className="cp-section-title">Consultation Packages</h2>
                         <p className="cp-section-note">
-                            Kundali Analysis (₹499 extra) can be discussed separately with the astrologer if required.
+                            Kundali Analysis (₹501 extra) can be discussed separately with the astrologer if required.
                         </p>
 
                         <div className="cp-packages">
                             {/* Basic */}
                             <div
-                                className={`cp-pkg-card${formData.package === "Basic Consultation - ₹199" ? " cp-pkg-selected" : ""}`}
-                                onClick={() => selectPackage("Basic Consultation - ₹199")}
+                                className={`cp-pkg-card${formData.package === "Basic Consultation - ₹303" ? " cp-pkg-selected" : ""}`}
+                                onClick={() => selectPackage("Basic Consultation - ₹303")}
                                 role="button"
                                 tabIndex={0}
-                                onKeyDown={(e) => e.key === "Enter" && selectPackage("Basic Consultation - ₹199")}
+                                onKeyDown={(e) => e.key === "Enter" && selectPackage("Basic Consultation - ₹303")}
                             >
                                 <p className="cp-pkg-tier">Basic</p>
-                                <h2 className="cp-pkg-price">₹199</h2>
+                                <h2 className="cp-pkg-price">₹303</h2>
                                 <p className="cp-pkg-name">Basic Consultation</p>
                                 <ul className="cp-pkg-features">
                                     <li>✓ One-time Consultation</li>
@@ -176,22 +176,22 @@ Description: ${formData.description}
                                     <li>✓ Astrology Guidance</li>
                                     <li>✓ Problem Discussion</li>
                                 </ul>
-                                <div className={`cp-pkg-select-indicator${formData.package === "Basic Consultation - ₹199" ? " active" : ""}`}>
-                                    {formData.package === "Basic Consultation - ₹199" ? "✓ Selected" : "Select Plan"}
+                                <div className={`cp-pkg-select-indicator${formData.package === "Basic Consultation - ₹303" ? " active" : ""}`}>
+                                    {formData.package === "Basic Consultation - ₹303" ? "✓ Selected" : "Select Plan"}
                                 </div>
                             </div>
 
                             {/* Premium */}
                             <div
-                                className={`cp-pkg-card cp-pkg-featured${formData.package === "Premium Membership - ₹499" ? " cp-pkg-selected" : ""}`}
-                                onClick={() => selectPackage("Premium Membership - ₹499")}
+                                className={`cp-pkg-card cp-pkg-featured${formData.package === "Premium Membership - ₹501" ? " cp-pkg-selected" : ""}`}
+                                onClick={() => selectPackage("Premium Membership - ₹501")}
                                 role="button"
                                 tabIndex={0}
-                                onKeyDown={(e) => e.key === "Enter" && selectPackage("Premium Membership - ₹499")}
+                                onKeyDown={(e) => e.key === "Enter" && selectPackage("Premium Membership - ₹501")}
                             >
                                 <span className="cp-pkg-badge">Most Popular</span>
                                 <p className="cp-pkg-tier">Premium</p>
-                                <h2 className="cp-pkg-price">₹499</h2>
+                                <h2 className="cp-pkg-price">₹501</h2>
                                 <p className="cp-pkg-name">Premium Membership</p>
                                 <ul className="cp-pkg-features">
                                     <li>✓ Lifetime Consultation Support</li>
@@ -200,8 +200,8 @@ Description: ${formData.description}
                                     <li>✓ Existing Client Benefits</li>
                                     <li>✓ Office Visit Support</li>
                                 </ul>
-                                <div className={`cp-pkg-select-indicator${formData.package === "Premium Membership - ₹499" ? " active" : ""}`}>
-                                    {formData.package === "Premium Membership - ₹499" ? "✓ Selected" : "Select Plan"}
+                                <div className={`cp-pkg-select-indicator${formData.package === "Premium Membership - ₹501" ? " active" : ""}`}>
+                                    {formData.package === "Premium Membership - ₹501" ? "✓ Selected" : "Select Plan"}
                                 </div>
                             </div>
                         </div>
@@ -268,8 +268,8 @@ Description: ${formData.description}
                                 <select className="cp-input" name="package"
                                     value={formData.package} onChange={handleChange} required>
                                     <option value="">Select package</option>
-                                    <option value="Basic Consultation - ₹199">Basic Consultation – ₹199</option>
-                                    <option value="Premium Membership - ₹499">Premium Membership – ₹499</option>
+                                    <option value="Basic Consultation - ₹303">Basic Consultation – ₹303</option>
+                                    <option value="Premium Membership - ₹501">Premium Membership – ₹501</option>
                                 </select>
                             </div>
 

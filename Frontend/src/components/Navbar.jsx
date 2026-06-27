@@ -69,7 +69,7 @@ const Navbar = () => {
 
                             <div>
                                 <h1 className="text-3xl font-bold text-[#D4AF37] tracking-wide">
-                                    ADHYATMA JYOTISH
+                                    VEDIC JYOTISH
                                 </h1>
 
                                 <p className="text-gray-300 text-sm">

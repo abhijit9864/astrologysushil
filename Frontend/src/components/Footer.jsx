@@ -13,7 +13,7 @@ const Footer = () => {
 
         {/* About */}
         <div className="footer-about">
-          <h2>ADHYATMA JYOTISH</h2>
+          <h2>VEDIC JYOTISH</h2>
 
           <p>
             Trusted Astrology Consultation for Career,
@@ -80,7 +80,7 @@ const Footer = () => {
       </div>
 
       <div className="footer-bottom">
-        © 2026 Adhyatma Jyotish | All Rights Reserved
+        © 2026 VEDIC Jyotish | All Rights Reserved
       </div>
 
     </footer>
