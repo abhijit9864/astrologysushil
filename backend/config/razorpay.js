@@ -1,11 +1,23 @@
 const Razorpay = require("razorpay");
 
-console.log("KEY:", process.env.RAZORPAY_KEY_ID);
-console.log("SECRET:", process.env.RAZORPAY_KEY_SECRET);
+const keyId = process.env.RAZORPAY_KEY_ID;
+const keySecret = process.env.RAZORPAY_KEY_SECRET;
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+if (!keyId || !keySecret) {
+  console.warn("Razorpay credentials not configured. Payment routes will be unavailable until env vars are set.");
+}
+
+const razorpay = keyId && keySecret
+  ? new Razorpay({
+      key_id: keyId,
+      key_secret: keySecret,
+    })
+  : {
+      orders: {
+        create: async () => {
+          throw new Error("Razorpay not configured");
+        },
+      },
+    };
 
 module.exports = razorpay;
