@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import API_BASE_URL from "../../config/api";
 import socket from "../../utils/socketClient";
 
 const PENDING_CHAT_REQUESTS_KEY = "pendingChatRequests";
@@ -28,7 +29,7 @@ export default function AdminNotifications() {
     const token = localStorage.getItem("adminToken");
     const fetchPendingRequests = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/admin/pending-chat-requests", { headers: { Authorization: `Bearer ${token}` } });
+        const res = await axios.get(`${API_BASE_URL}/api/admin/pending-chat-requests`, { headers: { Authorization: `Bearer ${token}` } });
         const next = res.data.requests || [];
         setPendingRequests(next);
         savePendingRequests(next);
@@ -38,7 +39,7 @@ export default function AdminNotifications() {
       }
     };
 
-    axios.get("http://localhost:5000/api/admin/notifications", { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(`${API_BASE_URL}/api/admin/notifications`, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => setNotifications(res.data.notifications || []));
 
     const initialRequests = parsePendingRequests();
@@ -93,7 +94,7 @@ export default function AdminNotifications() {
   const handleSend = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("adminToken");
-    await axios.post("http://localhost:5000/api/admin/notifications", form, { headers: { Authorization: `Bearer ${token}` } });
+    await axios.post(`${API_BASE_URL}/api/admin/notifications`, form, { headers: { Authorization: `Bearer ${token}` } });
     setForm({ title: "", message: "", target: "all" });
   };
 

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import API_BASE_URL from "../../config/api";
 import socket from "../../utils/socketClient";
 
 const PENDING_CHAT_REQUESTS_KEY = "pendingChatRequests";
@@ -34,7 +35,7 @@ export default function AdminChats() {
 
   const loadChats = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/api/admin/chats", {
+      const { data } = await axios.get(`${API_BASE_URL}/api/admin/chats`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const nextChats = (data.chats || []).map((chat) => ({
@@ -50,7 +51,7 @@ export default function AdminChats() {
   const loadMessages = async (user) => {
     if (!user) return;
     try {
-      const { data } = await axios.get(`http://localhost:5000/api/messages/${user.phone}`);
+      const { data } = await axios.get(`${API_BASE_URL}/api/messages/${user.phone}`);
       setMessages(data);
       setUnreadCounts((prev) => ({ ...prev, [user.id]: 0 }));
     } catch (err) {
@@ -98,7 +99,7 @@ export default function AdminChats() {
     if (!newMessage.trim() || !selectedChat) return;
 
     try {
-      const response = await axios.post("http://localhost:5000/api/send-message", {
+      const response = await axios.post(`${API_BASE_URL}/api/send-message`, {
         phone: selectedChat.phone,
         message: newMessage,
         sender: "admin",
@@ -128,7 +129,7 @@ export default function AdminChats() {
     const token = localStorage.getItem("adminToken");
     const fetchPendingRequests = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5000/api/admin/pending-chat-requests", {
+        const { data } = await axios.get(`${API_BASE_URL}/api/admin/pending-chat-requests`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const next = data.requests || [];

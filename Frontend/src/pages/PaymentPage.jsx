@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import "../styles/payment.css";
 import axios from "axios";
+import API_BASE_URL from "../config/api";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
@@ -21,12 +22,9 @@ const PaymentPage = () => {
         const chatUser = JSON.parse(rawUser);
         if (!chatUser?.phone) return;
 
-        const { data } = await axios.post(
-          "http://localhost:5000/api/check-payment",
-          {
-            phone: chatUser.phone,
-          }
-        );
+        const { data } = await axios.post(`${API_BASE_URL}/api/check-payment`, {
+          phone: chatUser.phone,
+        });
         if (data?.paid) {
           // If already paid, redirect to payment success to avoid duplicate payments
           navigate("/payment-success", { replace: true });
@@ -58,7 +56,7 @@ const PaymentPage = () => {
 
     // Save payment in DB
     // const paymentRes = await axios.post(
-    //   "http://localhost:5000/api/create-payment",
+    //   `${API_BASE_URL}/api/create-payment`,
     //   {
     //     phone: chatUser.phone,
     //     plan: selectedPlan,
@@ -66,18 +64,15 @@ const PaymentPage = () => {
     //   }
     // );
 
-        const paymentRes = await axios.post(
-          "http://localhost:5000/api/create-payment",
-          {
-            phone: chatUser.phone,
-            plan: selectedPlan,
-            amount,
-          }
-        );
+        const paymentRes = await axios.post(`${API_BASE_URL}/api/create-payment`, {
+          phone: chatUser.phone,
+          plan: selectedPlan,
+          amount,
+        });
 
         if (paymentRes.data.alreadyPaid) {
           // populate lastPayment for success page
-          const check = await axios.post("http://localhost:5000/api/check-payment", { phone: chatUser.phone });
+          const check = await axios.post(`${API_BASE_URL}/api/check-payment`, { phone: chatUser.phone });
           const lastPayment = {
             plan: check.data.plan || selectedPlan,
             amount: check.data.plan === "basic" ? 303 : 501,
@@ -97,12 +92,9 @@ const PaymentPage = () => {
         );
 
     // Create Razorpay Order
-    const { data: order } = await axios.post(
-      "http://localhost:5000/api/create-order",
-      {
-        amount,
-      }
-    );
+    const { data: order } = await axios.post(`${API_BASE_URL}/api/create-order`, {
+      amount,
+    });
 
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
@@ -135,7 +127,7 @@ const PaymentPage = () => {
 //       handler: async function (response) {
 
 //   await axios.post(
-//     "http://localhost:5000/api/verify-payment",
+//     `${API_BASE_URL}/api/verify-payment`,
 //     {
 
 //       razorpay_order_id:
@@ -171,17 +163,14 @@ const PaymentPage = () => {
 
   try {
 
-    const verify = await axios.post(
-      "http://localhost:5000/api/verify-payment",
-      {
-        razorpay_order_id: response.razorpay_order_id,
-        razorpay_payment_id: response.razorpay_payment_id,
-        razorpay_signature: response.razorpay_signature,
-        paymentId,
-        phone: chatUser.phone,
-        plan: selectedPlan,
-      }
-    );
+    const verify = await axios.post(`${API_BASE_URL}/api/verify-payment`, {
+      razorpay_order_id: response.razorpay_order_id,
+      razorpay_payment_id: response.razorpay_payment_id,
+      razorpay_signature: response.razorpay_signature,
+      paymentId,
+      phone: chatUser.phone,
+      plan: selectedPlan,
+    });
 
     console.log(verify.data);
 

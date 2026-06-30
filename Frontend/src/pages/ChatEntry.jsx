@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/chatEntry.css";
 import axios from "axios";
+import API_BASE_URL from "../config/api";
 import socket from "../utils/socketClient";
 
 const PENDING_CHAT_REQUESTS_KEY = "pendingChatRequests";
@@ -64,7 +65,7 @@ const ChatEntry = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:5000/api/check-user", {
+      const response = await axios.post(`${API_BASE_URL}/api/check-user`, {
         phone: formData.phone,
       });
 
@@ -95,7 +96,7 @@ const ChatEntry = () => {
         return;
       }
 
-      const registerResponse = await axios.post("http://localhost:5000/api/register-user", {
+      const registerResponse = await axios.post(`${API_BASE_URL}/api/register-user`, {
         name: formData.name,
         phone: formData.phone,
       });

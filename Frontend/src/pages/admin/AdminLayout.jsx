@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import axios from "axios";
+import API_BASE_URL from "../../config/api";
 import { FiBarChart2, FiBell, FiCreditCard, FiLogOut, FiMessageSquare, FiSearch, FiSettings, FiUsers } from "react-icons/fi";
 import { MdDashboard } from "react-icons/md";
 
@@ -22,7 +23,7 @@ export default function AdminLayout() {
       return;
     }
 
-    axios.get("http://localhost:5000/api/admin/profile", { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(`${API_BASE_URL}/api/admin/profile`, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => setAdmin(res.data.admin))
       .catch(() => {
         localStorage.removeItem("adminToken");

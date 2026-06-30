@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import API_BASE_URL from "../../config/api";
 import Swal from "sweetalert2";
 
 export default function AdminLogin() {
@@ -13,7 +14,7 @@ export default function AdminLogin() {
     setLoading(true);
 
     try {
-      const { data } = await axios.post("http://localhost:5000/api/admin/login", form);
+      const { data } = await axios.post(`${API_BASE_URL}/api/admin/login`, form);
       if (data.success) {
         localStorage.setItem("adminToken", data.token);
         Swal.fire({ icon: "success", title: "Welcome back", text: "Admin login successful" });

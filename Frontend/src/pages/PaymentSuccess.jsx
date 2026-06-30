@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import "../styles/paymentSuccess.css";
 import axios from "axios";
+import API_BASE_URL from "../config/api";
 
 const OWNER_NUMBER = import.meta.env.VITE_OWNER_NUMBER || "+917377237360";
 
@@ -25,7 +26,7 @@ const PaymentSuccess = () => {
         // Fallback: query server for plan
         try {
           const { phone } = JSON.parse(rawUser);
-          const { data } = await axios.post("http://localhost:5000/api/check-payment", { phone });
+          const { data } = await axios.post(`${API_BASE_URL}/api/check-payment`, { phone });
           setLastPayment({ plan: data.plan, amount: data.plan === "basic" ? 303 : 501 });
         } catch (err) {
           console.log(err);
@@ -36,7 +37,7 @@ const PaymentSuccess = () => {
       try {
         if (rawUser) {
           const { phone } = JSON.parse(rawUser);
-          const { data } = await axios.get(`http://localhost:5000/api/messages/${phone}`);
+          const { data } = await axios.get(`${API_BASE_URL}/api/messages/${phone}`);
           if (Array.isArray(data) && data.length) {
             const last = [...data].reverse().find((m) => m.sender === "user");
             setLastUserMessage(last ? last.message : "");

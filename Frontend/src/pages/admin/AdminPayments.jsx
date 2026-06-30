@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
+import API_BASE_URL from "../../config/api";
 
 export default function AdminPayments() {
   const [payments, setPayments] = useState([]);
@@ -7,7 +8,7 @@ export default function AdminPayments() {
 
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
-    axios.get("http://localhost:5000/api/admin/payments", { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(`${API_BASE_URL}/api/admin/payments`, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => setPayments(res.data.payments || []));
   }, []);
 

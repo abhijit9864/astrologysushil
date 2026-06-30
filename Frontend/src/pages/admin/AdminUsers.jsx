@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
+import API_BASE_URL from "../../config/api";
 import { Link } from "react-router-dom";
 
 export default function AdminUsers() {
@@ -8,7 +9,7 @@ export default function AdminUsers() {
 
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
-    axios.get("http://localhost:5000/api/admin/users", { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(`${API_BASE_URL}/api/admin/users`, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => setUsers(res.data.users || []));
   }, []);
 

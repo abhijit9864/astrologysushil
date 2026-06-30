@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import API_BASE_URL from "../../config/api";
 
 export default function AdminReports() {
   const [reports, setReports] = useState({});
 
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
-    axios.get("http://localhost:5000/api/admin/reports", { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(`${API_BASE_URL}/api/admin/reports`, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => setReports(res.data.reports || {}));
   }, []);
 

@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import "../styles/chat.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import API_BASE_URL from "../config/api";
 import socket from "../utils/socketClient";
 
 const FREE_CHAT_DURATION = 120;
@@ -73,9 +74,7 @@ const ChatPage = () => {
     try {
       const chatUser = JSON.parse(localStorage.getItem("chatUser"));
       if (!chatUser) return;
-      const { data } = await axios.get(
-        `http://localhost:5000/api/messages/${chatUser.phone}`
-      );
+      const { data } = await axios.get(`${API_BASE_URL}/api/messages/${chatUser.phone}`);
       setMessages(data);
     } catch (error) {
       console.log(error);
@@ -89,7 +88,7 @@ const ChatPage = () => {
       const chatUser = JSON.parse(rawUser);
       if (!chatUser?.phone) return;
 
-      const { data } = await axios.post("http://localhost:5000/api/check-payment", {
+      const { data } = await axios.post(`${API_BASE_URL}/api/check-payment`, {
         phone: chatUser.phone,
       });
 
@@ -135,7 +134,7 @@ const ChatPage = () => {
       const chatUser = JSON.parse(rawUser);
       if (!chatUser?.phone) return;
 
-      const { data } = await axios.get(`http://localhost:5000/api/consultation-state/${chatUser.phone}`);
+      const { data } = await axios.get(`${API_BASE_URL}/api/consultation-state/${chatUser.phone}`);
       const consultation = data?.consultation;
 
       if (!consultation) return;
@@ -172,7 +171,7 @@ const ChatPage = () => {
       const chatUser = JSON.parse(localStorage.getItem("chatUser"));
       if (!chatUser) return;
 
-      const response = await axios.post("http://localhost:5000/api/send-message", {
+      const response = await axios.post(`${API_BASE_URL}/api/send-message`, {
         phone: chatUser.phone,
         message,
         sender: "user",
@@ -230,7 +229,7 @@ const ChatPage = () => {
     try {
       const chatUser = JSON.parse(localStorage.getItem("chatUser"));
       if (chatUser) {
-        await axios.put(`http://localhost:5000/api/free-chat-used/${chatUser.phone}`);
+        await axios.put(`${API_BASE_URL}/api/free-chat-used/${chatUser.phone}`);
         socket.emit("free-chat-ended", {
           userId: chatUser.id,
           phone: chatUser.phone,

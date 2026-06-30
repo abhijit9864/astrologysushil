@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import API_BASE_URL from "../../config/api";
 import { FiBarChart2, FiClipboard, FiMessageSquare, FiUsers } from "react-icons/fi";
 
 const statCards = [
@@ -17,7 +18,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     const token = localStorage.getItem("adminToken");
-    axios.get("http://localhost:5000/api/admin/dashboard", { headers: { Authorization: `Bearer ${token}` } })
+    axios.get(`${API_BASE_URL}/api/admin/dashboard`, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => setAnalytics(res.data.analytics))
       .finally(() => setLoading(false));
   }, []);
