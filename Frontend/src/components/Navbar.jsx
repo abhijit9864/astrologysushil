@@ -31,7 +31,7 @@ const Navbar = () => {
 
     return (
         <>
-            {/* Top Bar */} <div className="bg-[#D4AF37] text-black"> <div className="max-w-7xl mx-auto px-4 py-2 flex flex-col md:flex-row justify-between items-center gap-2 text-sm font-medium"> <div className="flex items-center gap-2"> <FaPhoneAlt /> <span>+91 7377237360</span> </div>
+            {/* Top Bar */} <div className="bg-[#1E3A8A] text-white"> <div className="max-w-7xl mx-auto px-4 py-2 flex flex-col md:flex-row justify-between items-center gap-2 text-sm font-medium"> <div className="flex items-center gap-2"> <FaPhoneAlt /> <span>+91 7377237360</span> </div>
 
                 <div className="flex items-center gap-2">
                     <FaClock />
@@ -47,9 +47,9 @@ const Navbar = () => {
 
             {/* Main Navbar */}
             <nav
-                className={`sticky top-0 z-50 border-b border-[#D4AF37]/20 shadow-lg transition-all duration-300 ${darkMode
-                    ? "bg-[#020817] text-white"
-                    : "bg-white text-black"
+                className={`sticky top-0 z-50 border-b border-[#2563EB]/25 shadow-lg backdrop-blur-xl transition-all duration-300 ${darkMode
+                    ? "bg-[#08111F]/90 text-white"
+                    : "bg-[#08111F]/90 text-white"
                     }`}
             >
 
@@ -72,7 +72,7 @@ const Navbar = () => {
                                     VEDIC JYOTISH
                                 </h1>
 
-                                <p className="text-gray-300 text-sm">
+                                <p className="text-[#CBD5E1] text-sm">
                                     Astrologer Pandit Sushil
                                 </p>
 
@@ -86,7 +86,7 @@ const Navbar = () => {
                         <div className="hidden lg:flex items-center gap-5">
 
                             <div className="text-right">
-                                <p className="text-gray-400 text-sm">
+                                <p className="text-[#CBD5E1] text-sm">
                                     For Consultation
                                 </p>
 
@@ -94,32 +94,32 @@ const Navbar = () => {
                                     +91 7377237360
                                 </h3>
 
-                                <p className="text-gray-400 text-xs">
+                                <p className="text-[#CBD5E1] text-xs">
                                     Mon - Sun : 8AM - 9PM
                                 </p>
                             </div>
-                            <button
+                            {/* <button
                                 onClick={() => setDarkMode(!darkMode)}
-                                className="w-12 h-12 rounded-full border border-[#D4AF37] text-[#D4AF37] flex items-center justify-center hover:bg-[#D4AF37] hover:text-black transition"
+                                className="w-12 h-12 rounded-full border border-[#D4AF37] text-[#D4AF37] flex items-center justify-center hover:bg-[#2563EB] hover:text-white transition"
 
                             >
 
-                                {darkMode ? <FaSun /> : <FaMoon />} </button>
+                                {darkMode ? <FaSun /> : <FaMoon />} </button> */}
 
 
                             <a
                                 href="tel:+917377237360"
-                                className="border border-[#D4AF37] text-[#D4AF37] px-5 py-3 rounded-full hover:bg-[#D4AF37] hover:text-black transition"
+                                className="border border-[#D4AF37] text-[#D4AF37] px-5 py-3 rounded-full hover:bg-[#2563EB] hover:text-white transition"
                             >
                                 Call Now
                             </a>
 
                             <Link
-  to="/consultation"
-  className="bg-[#D4AF37] text-black px-5 py-3 rounded-full font-semibold"
->
-  Book Consultation
-</Link>
+                                to="/consultation"
+                                className="bg-[#2563EB] text-white px-5 py-3 rounded-full font-semibold border border-[#D4AF37]"
+                            >
+                                Book Consultation
+                            </Link>
                         </div>
 
                         {/* Mobile Toggle */}
@@ -132,7 +132,7 @@ const Navbar = () => {
                     </div>
 
                     {/* Menu Bar Desktop */}
-                    <div className="hidden lg:flex justify-center border-t border-[#D4AF37]/10 hover:text-[#D4AF37] hover:-translate-y-1 transition-all duration-300">
+                    <div className="hidden lg:flex justify-center border-t border-[#2563EB]/20 hover:text-[#D4AF37] hover:-translate-y-1 transition-all duration-300">
                         <ul
                             className={`flex gap-10 py-4 font-medium ${darkMode ? "text-white" : "text-black"
                                 }`}
@@ -154,7 +154,7 @@ const Navbar = () => {
 
                 {/* Mobile Menu */}
                 {isOpen && (
-                    <div className="lg:hidden bg-[#020817] border-t border-[#D4AF37]/20">
+                    <div className="lg:hidden bg-[#08111F]/95 border-t border-[#2563EB]/20">
                         <ul className={`flex flex-col gap-5 p-5 ${darkMode ? "text-white" : "text-black"}`}>
 
                             {navLinks.map((item) => (
@@ -173,7 +173,7 @@ const Navbar = () => {
 
                             <Link
                                 to="/consultation"
-                                className="bg-[#D4AF37] text-black px-5 py-3 rounded-full font-semibold hover:scale-105 transition"
+                                className="bg-[#2563EB] text-white px-5 py-3 rounded-full font-semibold hover:scale-105 transition border border-[#D4AF37]"
                             >
                                 Book Consultation
                             </Link>
@@ -185,7 +185,7 @@ const Navbar = () => {
                                 Call Now
                             </a>
 
-                            <button className="bg-[#D4AF37] text-black py-3 rounded-lg font-semibold">
+                            <button className="bg-[#2563EB] text-white py-3 rounded-lg font-semibold border border-[#D4AF37]">
                                 Book Consultation
                             </button>
                         </ul>

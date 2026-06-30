@@ -5,7 +5,7 @@
 
 /* ── Page Shell ── */
 .cp-page {
-  background: var(--bg);
+  background: linear-gradient(180deg, rgba(8, 17, 31, 0.98) 0%, rgba(16, 33, 58, 0.95) 100%);
   padding: 80px 20px 72px;
   min-height: 100vh;
 }

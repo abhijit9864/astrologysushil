@@ -8,23 +8,23 @@ const FAQ = () => {
   const faqs = [
     {
       question: "Do you provide online consultation?",
-      answer: "Yes, consultation is available through Phone Call and WhatsApp."
+      answer: "Yes, consultations are arranged through WhatsApp or phone call for your convenience."
     },
     {
       question: "How can I book an appointment?",
-      answer: "You can call us directly, contact us on WhatsApp or fill out the appointment form."
+      answer: "Simply fill the consultation form or reach out directly on WhatsApp to start your request."
     },
     {
       question: "What services do you provide?",
-      answer: "Kundli Analysis, Marriage Problems, Love Problems, Career Guidance, Numerology and Vastu Consultation."
+      answer: "We cover Career, Marriage, Love, Business, Health, Kundali, Vastu, Numerology and more."
     },
     {
       question: "Is my information confidential?",
-      answer: "Yes, all consultations remain completely private and confidential."
+      answer: "Yes, every consultation request is handled with care and complete privacy."
     },
     {
       question: "Do you provide remedies?",
-      answer: "Yes, personalized remedies are suggested according to your horoscope and life situation."
+      answer: "Yes, tailored guidance and remedies are shared based on your chart and life situation."
     }
   ];
 

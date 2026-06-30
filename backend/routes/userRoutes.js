@@ -2,90 +2,36 @@ const express = require("express");
 const router = express.Router();
 const db = require("../config/db");
 
-router.post("/check-user", (req, res) => {
-  const { phone } = req.body;
+router.post("/consultation-request", (req, res) => {
+  const { name, phone, dob, birthTime, birthPlace, service, problem } = req.body;
+
+  if (!name || !phone || !dob || !birthTime || !birthPlace || !service || !problem) {
+    return res.status(400).json({ success: false, message: "Please complete all required fields." });
+  }
+
+  const values = [name, phone, dob, birthTime, birthPlace, service, problem];
 
   db.query(
-    "SELECT * FROM users WHERE phone = ?",
-    [phone],
+    "INSERT INTO consultation_requests (name, phone, dob, birth_time, birth_place, service, problem) VALUES (?, ?, ?, ?, ?, ?, ?)",
+    values,
     (err, result) => {
       if (err) {
-        return res.status(500).json(err);
-      }
-
-      if (result.length === 0) {
-        return res.json({
-          exists: false,
-          freeChatUsed: false,
-        });
-      }
-
-      return res.json({
-        exists: true,
-        freeChatUsed: result[0].free_chat_used,
-        id: result[0].id,
-      });
-    }
-  );
-});
-router.post("/register-user", (req, res) => {
-  const { name, phone } = req.body;
-
-  db.query(
-    "SELECT * FROM users WHERE phone = ?",
-    [phone],
-    (err, result) => {
-      if (err) {
-        return res.status(500).json(err);
-      }
-
-      if (result.length > 0) {
-        return res.json({
-          success: true,
-          message: "User already exists",
-          id: result[0].id,
-        });
+        return res.status(500).json({ success: false, message: "Unable to save consultation request." });
       }
 
       db.query(
-        "INSERT INTO users(name, phone) VALUES(?, ?)",
-        [name, phone],
-        (err, insertResult) => {
-          if (err) {
-            return res.status(500).json(err);
+        "INSERT INTO users (name, phone, dob, birth_time, birth_place, service, problem, plan, payment_status, chat_status) VALUES (?, ?, ?, ?, ?, ?, ?, 'lead', 'pending', 'new')",
+        values,
+        (userErr) => {
+          if (userErr) {
+            console.error("Failed to sync lead to users table", userErr);
           }
-
-          res.json({
-            success: true,
-            message: "User registered",
-            id: insertResult.insertId,
-          });
         }
       );
+
+      res.json({ success: true, id: result.insertId, message: "Consultation request received." });
     }
   );
-});
-
-router.put("/free-chat-used/:phone", (req, res) => {
-
-  const { phone } = req.params;
-
-  db.query(
-    "UPDATE users SET free_chat_used = true WHERE phone = ?",
-    [phone],
-    (err) => {
-
-      if (err) {
-        return res.status(500).json(err);
-      }
-
-      res.json({
-        success: true
-      });
-
-    }
-  );
-
 });
 
 module.exports = router;

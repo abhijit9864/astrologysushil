@@ -60,27 +60,22 @@ router.get("/admin/dashboard", authMiddleware, (req, res) => {
     `SELECT
       (SELECT COUNT(*) FROM users) AS totalUsers,
       (SELECT COUNT(*) FROM users WHERE DATE(created_at) = CURDATE()) AS todayUsers,
-      (SELECT COUNT(*) FROM users WHERE plan = 'premium') AS premiumUsers,
-      (SELECT COUNT(*) FROM users WHERE plan = 'basic') AS basicUsers,
-      (SELECT COUNT(*) FROM users WHERE payment_status = 'paid') AS activeChats,
-      (SELECT COUNT(*) FROM users WHERE payment_status = 'expired') AS expiredChats,
-      (SELECT COUNT(*) FROM payments) AS totalPayments,
-      (SELECT COALESCE(SUM(amount),0) FROM payments WHERE DATE(created_at) = CURDATE()) AS todayRevenue,
-      (SELECT COALESCE(SUM(amount),0) FROM payments WHERE MONTH(created_at) = MONTH(CURDATE()) AND YEAR(created_at)=YEAR(CURDATE())) AS monthlyRevenue,
-      (SELECT COUNT(*) FROM messages WHERE sender='user') AS unreadChats`,
+      (SELECT COUNT(*) FROM consultation_requests) AS consultationRequests,
+      (SELECT COUNT(*) FROM consultation_requests WHERE DATE(created_at) = CURDATE()) AS todayRequests,
+      (SELECT COUNT(*) FROM consultation_requests) AS totalLeads,
+      (SELECT COUNT(*) FROM consultation_requests) AS pendingLeads`,
     (err, result) => {
       if (err) {
         return res.status(500).json({ message: "Database error" });
       }
 
-      const analytics = result[0];
-      res.json({ success: true, analytics });
+      res.json({ success: true, analytics: result[0] });
     }
   );
 });
 
 router.get("/admin/users", authMiddleware, (req, res) => {
-  const sql = `SELECT id, name, phone, plan, payment_status, free_chat_used, created_at FROM users ORDER BY created_at DESC`;
+  const sql = `SELECT id, name, phone, service, problem, created_at FROM users ORDER BY created_at DESC`;
   db.query(sql, (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error" });
@@ -97,36 +92,52 @@ router.get("/admin/users/:id", authMiddleware, (req, res) => {
       return res.status(500).json({ message: "Database error" });
     }
     if (result.length === 0) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "Lead not found" });
     }
     res.json({ success: true, user: result[0] });
   });
 });
 
-router.get("/admin/chats", authMiddleware, (req, res) => {
-  const sql = `SELECT u.id, u.name, u.phone, u.plan, COUNT(m.id) AS messageCount
-               FROM users u
-               LEFT JOIN messages m ON m.user_id = u.id
-               GROUP BY u.id, u.name, u.phone, u.plan
-               ORDER BY u.id DESC`;
-  db.query(sql, (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: "Database error" });
+router.get("/admin/consultation-requests", authMiddleware, (req, res) => {
+  db.query(
+    `SELECT id, name, phone, dob, birth_time, birth_place, service, problem, created_at FROM consultation_requests ORDER BY created_at DESC`,
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error" });
+      }
+
+      res.json({ success: true, requests: result });
     }
-    res.json({ success: true, chats: result });
-  });
+  );
 });
 
-router.get("/admin/payments", authMiddleware, (req, res) => {
-  const sql = `SELECT p.id, p.amount, p.plan, p.status, p.created_at, p.razorpay_payment_id, u.name, u.phone
-               FROM payments p
-               LEFT JOIN users u ON p.user_id = u.id
-               ORDER BY p.created_at DESC`;
-  db.query(sql, (err, result) => {
-    if (err) {
+router.delete("/admin/consultation-requests/:id", authMiddleware, (req, res) => {
+  const { id } = req.params;
+
+  db.query("SELECT phone FROM consultation_requests WHERE id = ?", [id], (selectErr, results) => {
+    if (selectErr) {
       return res.status(500).json({ message: "Database error" });
     }
-    res.json({ success: true, payments: result });
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: "Consultation request not found" });
+    }
+
+    const phone = results[0].phone;
+
+    db.query("DELETE FROM consultation_requests WHERE id = ?", [id], (err) => {
+      if (err) {
+        return res.status(500).json({ message: "Database error" });
+      }
+
+      db.query("DELETE FROM users WHERE phone = ?", [phone], (userErr) => {
+        if (userErr) {
+          console.error("Failed to delete synced user lead", userErr);
+        }
+      });
+
+      res.json({ success: true, message: "Consultation request deleted." });
+    });
   });
 });
 
@@ -147,23 +158,6 @@ router.post("/admin/notifications", authMiddleware, (req, res) => {
     }
     res.json({ success: true, message: "Notification created" });
   });
-});
-
-router.get("/admin/reports", authMiddleware, (req, res) => {
-  db.query(
-    `SELECT
-      (SELECT COALESCE(SUM(amount),0) FROM payments WHERE DATE(created_at)=CURDATE()) AS dailyRevenue,
-      (SELECT COALESCE(SUM(amount),0) FROM payments WHERE WEEK(created_at)=WEEK(CURDATE())) AS weeklyRevenue,
-      (SELECT COALESCE(SUM(amount),0) FROM payments WHERE MONTH(created_at)=MONTH(CURDATE()) AND YEAR(created_at)=YEAR(CURDATE())) AS monthlyRevenue,
-      (SELECT COUNT(*) FROM messages WHERE sender='user') AS totalChats,
-      (SELECT plan FROM payments GROUP BY plan ORDER BY COUNT(*) DESC LIMIT 1) AS mostPurchasedPlan`,
-    (err, result) => {
-      if (err) {
-        return res.status(500).json({ message: "Database error" });
-      }
-      res.json({ success: true, reports: result[0] });
-    }
-  );
 });
 
 module.exports = router;

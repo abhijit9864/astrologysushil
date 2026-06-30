@@ -1,34 +1,17 @@
 import "../styles/contact.css";
-import {
-  FaPhoneAlt,
-  FaWhatsapp,
-  FaMapMarkerAlt,
-  FaClock
-} from "react-icons/fa";
+import { FaPhoneAlt, FaWhatsapp, FaMapMarkerAlt, FaClock } from "react-icons/fa";
 
 const Contact = () => {
   return (
     <section className="contact-section">
-
       <div className="contact-header">
-        <span className="contact-badge">
-          Contact Us
-        </span>
-
-        <h2>
-          Book Your Consultation
-        </h2>
-
-        <p>
-          Get expert astrology guidance for your life,
-          career, marriage and future.
-        </p>
+        <span className="contact-badge">Contact</span>
+        <h2>Book your premium consultation</h2>
+        <p>Reach out directly by phone, WhatsApp or through the consultation form.</p>
       </div>
 
       <div className="contact-container">
-
         <div className="contact-info">
-
           <div className="contact-card">
             <FaPhoneAlt />
             <div>
@@ -41,7 +24,7 @@ const Contact = () => {
             <FaWhatsapp />
             <div>
               <h3>WhatsApp</h3>
-              <p>Available 24/7</p>
+              <p>Direct consultation lead</p>
             </div>
           </div>
 
@@ -57,48 +40,17 @@ const Contact = () => {
             <FaClock />
             <div>
               <h3>Consultation Hours</h3>
-              <p>8:00 AM - 9:00 PM</p>
+              <p>8:00 AM – 9:00 PM</p>
             </div>
           </div>
-
         </div>
 
         <div className="contact-form-wrapper">
-
-          <h3>Schedule Appointment</h3>
-
-          <p>
-            Fill in your details and our team will
-            contact you shortly.
-          </p>
-
-          <form className="contact-form">
-
-            <input
-              type="text"
-              placeholder="Your Full Name"
-            />
-
-            <input
-              type="tel"
-              placeholder="Phone Number"
-            />
-
-            <textarea
-              rows="6"
-              placeholder="Describe Your Problem"
-            />
-
-            <button type="submit">
-              Book Appointment
-            </button>
-
-          </form>
-
+          <h3>Start your request</h3>
+          <p>Fill the details and we will connect with you immediately on WhatsApp.</p>
+          <a href="/consultation" className="contact-cta">Open Consultation Form</a>
         </div>
-
       </div>
-
     </section>
   );
 };

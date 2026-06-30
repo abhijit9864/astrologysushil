@@ -6,20 +6,17 @@ const Testimonials = () => {
     {
       name: "Rahul Sharma",
       location: "Bhubaneswar",
-      review:
-        "The consultation was very accurate and helped me solve my career issues.",
+      review: "The consultation felt premium and deeply personal. The guidance helped me make a confident career decision.",
     },
     {
       name: "Priya Das",
       location: "Cuttack",
-      review:
-        "I got positive results in my marriage after following the guidance.",
+      review: "The process was smooth, clear and comforting. I felt heard from the very first step.",
     },
     {
       name: "Amit Kumar",
       location: "Puri",
-      review:
-        "Very knowledgeable astrologer. Highly recommended for Kundli analysis.",
+      review: "I booked through WhatsApp and received thoughtful guidance with great clarity and patience.",
     },
   ];
 

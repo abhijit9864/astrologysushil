@@ -1,32 +1,19 @@
 .floating-btn{
   position:fixed;
-
   right:25px;
-
   width:60px;
   height:60px;
-
   border-radius:50%;
-
   display:flex;
   justify-content:center;
   align-items:center;
-
   font-size:24px;
-
   color:#fff;
-
   z-index:999;
-
   text-decoration:none;
-
   border:none;
-
   cursor:pointer;
-
-  box-shadow:
-  0 8px 25px rgba(0,0,0,.25);
-
+  box-shadow:0 8px 25px rgba(0,0,0,.25);
   transition:.3s;
 }
 
@@ -41,13 +28,13 @@
 
 .call-btn{
   bottom:70px;
-  background:#d4af37;
-  color:black;
+  background:linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+  color:white;
 }
 
 .top-btn{
   bottom:210px;
-  background:#0f172a;
-  color:#d4af37;
-  border:1px solid #d4af37;
+  background:#08111F;
+  color:var(--primary);
+  border:1px solid rgba(37, 99, 235, 0.35);
 }

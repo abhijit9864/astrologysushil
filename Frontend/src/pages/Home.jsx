@@ -2,13 +2,13 @@ import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import Services from "../components/Services";
 import About from "../components/About";
-import WhyChooseUs from "../components/WhyChooseUs";
+import HowItWorks from "../components/HowItWorks";
 import Testimonials from "../components/Testimonials";
-import Gallary from "../components/Gallery";
 import Contact from "../components/Contact";
 import Faq from "../components/Faq";
 import Footer from "../components/Footer";
 import FloatingButtons from "../components/FloatingButtons";
+
 const Home = () => {
   return (
     <>
@@ -16,9 +16,8 @@ const Home = () => {
       <Hero />
       <Services />
       <About />
-      <WhyChooseUs />
+      <HowItWorks />
       <Testimonials />
-      <Gallary />
       <Contact />
       <Faq />
       <Footer />

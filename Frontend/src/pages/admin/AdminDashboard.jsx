@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { FiBarChart2, FiCreditCard, FiMessageSquare, FiUsers } from "react-icons/fi";
+import { FiBarChart2, FiClipboard, FiMessageSquare, FiUsers } from "react-icons/fi";
 
 const statCards = [
-  { key: "totalUsers", label: "Total Users", icon: FiUsers, color: "from-cyan-500 to-sky-700" },
-  { key: "todayUsers", label: "Today's Users", icon: FiUsers, color: "from-emerald-500 to-green-700" },
-  { key: "premiumUsers", label: "Premium Users", icon: FiCreditCard, color: "from-violet-500 to-fuchsia-700" },
-  { key: "basicUsers", label: "Basic Users", icon: FiCreditCard, color: "from-amber-500 to-orange-700" },
-  { key: "activeChats", label: "Active Chats", icon: FiMessageSquare, color: "from-rose-500 to-red-700" },
-  { key: "monthlyRevenue", label: "Monthly Revenue", icon: FiBarChart2, color: "from-blue-500 to-indigo-700" },
+  { key: "totalUsers", label: "Total Leads", icon: FiUsers, color: "from-cyan-500 to-sky-700" },
+  { key: "todayUsers", label: "Today's Leads", icon: FiUsers, color: "from-emerald-500 to-green-700" },
+  { key: "consultationRequests", label: "Consultation Requests", icon: FiClipboard, color: "from-violet-500 to-fuchsia-700" },
+  { key: "todayRequests", label: "Today's Requests", icon: FiClipboard, color: "from-amber-500 to-orange-700" },
+  { key: "totalLeads", label: "Total Requests", icon: FiMessageSquare, color: "from-rose-500 to-red-700" },
+  { key: "pendingLeads", label: "Pending Follow-up", icon: FiBarChart2, color: "from-blue-500 to-indigo-700" },
 ];
 
 export default function AdminDashboard() {

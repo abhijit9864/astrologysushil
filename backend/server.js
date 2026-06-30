@@ -1,83 +1,20 @@
 require("dotenv").config();
 
-const http = require("http");
 const express = require("express");
 const cors = require("cors");
-const { Server } = require("socket.io");
 const db = require("./config/db");
 
 const userRoutes = require("./routes/userRoutes");
-const paymentRoutes = require("./routes/paymentRoutes");
-const chatRoutes = require("./routes/chatRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", userRoutes);
-app.use("/api", paymentRoutes);
-app.use("/api", chatRoutes);
 app.use("/api", adminRoutes);
-
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
-    methods: ["GET", "POST"],
-  },
-});
-
-app.set("io", io);
-
-io.on("connection", (socket) => {
-  console.log("Socket connected:", socket.id);
-
-  socket.on("join-room", ({ roomId }) => {
-    if (!roomId) return;
-    const room = String(roomId);
-    socket.join(room);
-    console.log(`Socket ${socket.id} joined room ${room}`);
-  });
-
-  socket.on("leave-room", ({ roomId }) => {
-    if (!roomId) return;
-    const room = String(roomId);
-    socket.leave(room);
-    console.log(`Socket ${socket.id} left room ${room}`);
-  });
-
-  socket.on("send-message", (payload) => {
-    const { roomId, ...data } = payload || {};
-    if (!roomId) return;
-    const room = String(roomId);
-    socket.to(room).emit("receive-message", data);
-    socket.emit("message-delivered", { messageId: data.id, sender: data.sender });
-  });
-
-  socket.on("typing", ({ roomId, sender, userId }) => {
-    if (!roomId) return;
-    const room = String(roomId);
-    socket.to(room).emit("typing", { sender, userId });
-  });
-
-  socket.on("stop-typing", ({ roomId, sender, userId }) => {
-    if (!roomId) return;
-    const room = String(roomId);
-    socket.to(room).emit("stop-typing", { sender, userId });
-  });
-
-  socket.on("message-seen", ({ roomId, messageId, sender, userId }) => {
-    if (!roomId) return;
-    const room = String(roomId);
-    socket.to(room).emit("message-seen", { messageId, sender, userId });
-  });
-
-  socket.on("disconnect", () => {
-    console.log("Socket disconnected:", socket.id);
-  });
-});
 
 function initializeDatabase() {
   const createAdminTable = `
@@ -86,6 +23,38 @@ function initializeDatabase() {
       name VARCHAR(100) NOT NULL,
       email VARCHAR(100) NOT NULL UNIQUE,
       password VARCHAR(255) NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `;
+
+  const createUsersTable = `
+    CREATE TABLE IF NOT EXISTS users (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(100) NOT NULL,
+      phone VARCHAR(30) NOT NULL,
+      dob DATE NULL,
+      birth_time VARCHAR(20) NULL,
+      birth_place VARCHAR(100) NULL,
+      service VARCHAR(100) NULL,
+      problem TEXT NULL,
+      plan VARCHAR(50) DEFAULT 'lead',
+      payment_status VARCHAR(20) DEFAULT 'pending',
+      free_chat_used TINYINT(1) DEFAULT 0,
+      chat_status VARCHAR(20) DEFAULT 'new',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `;
+
+  const createConsultationRequestsTable = `
+    CREATE TABLE IF NOT EXISTS consultation_requests (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(100) NOT NULL,
+      phone VARCHAR(30) NOT NULL,
+      dob DATE NULL,
+      birth_time VARCHAR(20) NULL,
+      birth_place VARCHAR(100) NULL,
+      service VARCHAR(100) NULL,
+      problem TEXT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
   `;
@@ -128,6 +97,18 @@ function initializeDatabase() {
     });
   });
 
+  db.query(createUsersTable, (err) => {
+    if (err) {
+      console.error("Users table init error", err);
+    }
+  });
+
+  db.query(createConsultationRequestsTable, (err) => {
+    if (err) {
+      console.error("Consultation requests table init error", err);
+    }
+  });
+
   db.query(createNotificationsTable, (err) => {
     if (err) {
       console.error("Notifications table init error", err);
@@ -137,6 +118,6 @@ function initializeDatabase() {
 
 initializeDatabase();
 
-server.listen(5000, () => {
+app.listen(5000, () => {
   console.log("Server Running on 5000");
 });

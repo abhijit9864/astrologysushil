@@ -1,6 +1,6 @@
 .why-section{
   padding:100px 20px;
-  background: var(--bg);
+  background: linear-gradient(180deg, rgba(8, 17, 31, 0.98) 0%, rgba(16, 33, 58, 0.95) 100%);
 }
 
 .why-header{
@@ -10,7 +10,7 @@
 
 .why-header h2{
   font-size:3rem;
-   color: var(--text);
+  color: var(--text);
   margin-top:20px;
 }
 
@@ -21,55 +21,38 @@
 .why-grid{
   max-width:1300px;
   margin:auto;
-
   display:grid;
-  grid-template-columns:
-  repeat(auto-fit,minmax(280px,1fr));
-
+  grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
   gap:30px;
 }
 
 .why-card{
-  background: var(--card);
-
-  border:
-  1px solid rgba(212,175,55,.15);
-
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.16) 0%, rgba(16, 33, 58, 0.95) 100%);
+  border:1px solid rgba(37, 99, 235, 0.25);
   border-radius:25px;
-
   padding:35px;
-
   text-align:center;
-
   transition:.4s;
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
 }
 
 .why-card:hover{
   transform:translateY(-10px);
-
-  border-color:#d4af37;
-
-  box-shadow:
-  0 15px 35px rgba(212,175,55,.12);
+  border-color:var(--primary);
+  box-shadow:0 15px 35px rgba(37,99,235,.2);
 }
 
 .why-icon{
   width:80px;
   height:80px;
-
   margin:auto auto 20px;
-
   display:flex;
   justify-content:center;
   align-items:center;
-
   border-radius:50%;
-
-  background:
-  rgba(212,175,55,.12);
-
- color: var(--primary);
-
+  background:rgba(37,99,235,.12);
+  color: var(--primary);
   font-size:2rem;
 }
 
@@ -85,14 +68,9 @@
 
 .wcu-badge{
   display:inline-block;
-
   padding:10px 20px;
-
-  border:1px solid #d4af37;
-
+  border:1px solid rgba(37, 99, 235, 0.35);
   border-radius:999px;
-
-  color:#d4af37;
-
+  color:var(--primary);
   margin-bottom:20px;
 }

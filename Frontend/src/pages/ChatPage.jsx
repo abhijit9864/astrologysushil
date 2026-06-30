@@ -8,6 +8,31 @@ import socket from "../utils/socketClient";
 
 const FREE_CHAT_DURATION = 120;
 const CHAT_START_KEY = "chatStartTime";
+const CHAT_SESSION_KEY = "chatSession";
+
+const readChatSession = () => {
+  try {
+    return JSON.parse(localStorage.getItem(CHAT_SESSION_KEY) || "{}");
+  } catch (error) {
+    console.error("[ChatPage] failed to read chat session", error);
+    return {};
+  }
+};
+
+const writeChatSession = (session) => {
+  try {
+    localStorage.setItem(CHAT_SESSION_KEY, JSON.stringify(session));
+  } catch (error) {
+    console.error("[ChatPage] failed to save chat session", error);
+  }
+};
+
+const saveChatSessionState = (overrides = {}) => {
+  const current = readChatSession();
+  const next = { ...current, ...overrides };
+  writeChatSession(next);
+  return next;
+};
 
 const ChatPage = () => {
   const navigate = useNavigate();
@@ -20,6 +45,10 @@ const ChatPage = () => {
   const [onlineStatus, setOnlineStatus] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [chatReady, setChatReady] = useState(false);
+  const [consultationStatus, setConsultationStatus] = useState("waiting");
+  const [remainingSeconds, setRemainingSeconds] = useState(0);
+  const [isAdminOnline, setIsAdminOnline] = useState(false);
   const [messageStatuses, setMessageStatuses] = useState({});
   const timerEndHandledRef = useRef(false);
   const typingTimeoutRef = useRef(null);
@@ -70,6 +99,7 @@ const ChatPage = () => {
         setIsLocked(true);
         localStorage.removeItem(CHAT_START_KEY);
         setTimeLeft(0);
+        setChatReady(true);
         return;
       }
 
@@ -78,19 +108,66 @@ const ChatPage = () => {
         setChatEndTime(data.chat_end_time || null);
         setIsLocked(true);
         localStorage.removeItem(CHAT_START_KEY);
+        setChatReady(true);
         return;
       }
 
+      const session = readChatSession();
+      const accepted = Boolean(chatUser.chatRequestAccepted || session.chatRequestAccepted || session.chatReady);
       setUserPlan("free");
       setChatEndTime(null);
       setIsLocked(false);
+      setChatReady(accepted);
+
+      if (accepted) {
+        const startTime = getFreeStartTime() || setFreeStartTime(chatUser.acceptedAt || session.acceptedAt || Date.now());
+        setTimeLeft(getRemainingFreeSeconds(startTime));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const loadConsultationState = async () => {
+    try {
+      const rawUser = localStorage.getItem("chatUser");
+      if (!rawUser) return;
+      const chatUser = JSON.parse(rawUser);
+      if (!chatUser?.phone) return;
+
+      const { data } = await axios.get(`http://localhost:5000/api/consultation-state/${chatUser.phone}`);
+      const consultation = data?.consultation;
+
+      if (!consultation) return;
+
+      const nextStatus = consultation.status || "waiting";
+      const nextRemainingSeconds = Number(consultation.remainingSeconds || 0);
+
+      setConsultationStatus(nextStatus);
+      setRemainingSeconds(nextRemainingSeconds);
+      setTimeLeft(nextRemainingSeconds);
+
+      if (nextStatus === "live") {
+        setChatReady(true);
+        setIsLocked(false);
+        setChatEndTime(consultation.chatEndTime || null);
+        setUserPlan(consultation.plan === "premium" ? "premium" : "free");
+      } else if (nextStatus === "expired") {
+        setChatReady(false);
+        setIsLocked(true);
+        setTimeLeft(0);
+        setRemainingSeconds(0);
+      } else {
+        setChatReady(false);
+        setIsLocked(false);
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
   const sendMessage = async () => {
-    if (!message.trim() || isLocked) return;
+    if (!message.trim() || isLocked || !chatReady) return;
     try {
       const chatUser = JSON.parse(localStorage.getItem("chatUser"));
       if (!chatUser) return;
@@ -123,14 +200,15 @@ const ChatPage = () => {
   };
 
   const getFreeStartTime = () => {
-    const stored = localStorage.getItem(CHAT_START_KEY);
+    const session = readChatSession();
+    const stored = session.freeStartTime || localStorage.getItem(CHAT_START_KEY);
     return stored && !Number.isNaN(Number(stored)) ? Number(stored) : null;
   };
 
-  const setFreeStartTime = () => {
-    const now = Date.now();
-    localStorage.setItem(CHAT_START_KEY, String(now));
-    return now;
+  const setFreeStartTime = (timestamp = Date.now()) => {
+    saveChatSessionState({ freeStartTime: timestamp });
+    localStorage.setItem(CHAT_START_KEY, String(timestamp));
+    return timestamp;
   };
 
   const getRemainingFreeSeconds = (startTime) => {
@@ -153,10 +231,16 @@ const ChatPage = () => {
       const chatUser = JSON.parse(localStorage.getItem("chatUser"));
       if (chatUser) {
         await axios.put(`http://localhost:5000/api/free-chat-used/${chatUser.phone}`);
+        socket.emit("free-chat-ended", {
+          userId: chatUser.id,
+          phone: chatUser.phone,
+          userName: chatUser.name,
+        });
       }
     } catch (error) {
       console.log(error);
     } finally {
+      saveChatSessionState({ freeChatUsed: true, chatReady: false, freeStartTime: null });
       localStorage.removeItem(CHAT_START_KEY);
       setIsLocked(true);
       setTimeout(() => {
@@ -182,6 +266,7 @@ const ChatPage = () => {
     if (!chatUser?.phone) return;
 
     loadChatState();
+    loadConsultationState();
     loadMessages();
 
     const notificationAudio = new Audio(
@@ -194,9 +279,13 @@ const ChatPage = () => {
     socket.on("connect", () => {
       setOnlineStatus(true);
       socket.emit("join-room", { roomId: chatUser.id });
+      socket.emit("user-online", { userId: chatUser.id });
     });
 
-    socket.on("disconnect", () => setOnlineStatus(false));
+    socket.on("disconnect", () => {
+      setOnlineStatus(false);
+      socket.emit("user-offline", { userId: chatUser.id });
+    });
 
     socket.on("receive-message", (incoming) => {
       if (!incoming) return;
@@ -240,6 +329,54 @@ const ChatPage = () => {
       }
     });
 
+    socket.on("chat-request-accepted", () => {
+      const acceptedAt = Date.now();
+      const storedUser = JSON.parse(localStorage.getItem("chatUser") || "{}");
+      storedUser.chatRequestPending = false;
+      storedUser.chatRequestAccepted = true;
+      storedUser.acceptedAt = acceptedAt;
+      localStorage.setItem("chatUser", JSON.stringify(storedUser));
+      saveChatSessionState({ chatRequestAccepted: true, acceptedAt, freeStartTime: acceptedAt, chatReady: true });
+      setConsultationStatus("accepted");
+      setChatReady(true);
+      setIsLocked(false);
+      setUserPlan("free");
+      setChatEndTime(null);
+      setTimeLeft(FREE_CHAT_DURATION);
+      localStorage.setItem(CHAT_START_KEY, String(acceptedAt));
+    });
+
+    socket.on("consultation-started", ({ remainingSeconds }) => {
+      const storedUser = JSON.parse(localStorage.getItem("chatUser") || "{}");
+      storedUser.chatRequestAccepted = true;
+      localStorage.setItem("chatUser", JSON.stringify(storedUser));
+      setConsultationStatus("live");
+      setChatReady(true);
+      setIsLocked(false);
+      setTimeLeft(Number(remainingSeconds || 0));
+      setRemainingSeconds(Number(remainingSeconds || 0));
+    });
+
+    socket.on("consultation-tick", ({ remainingSeconds }) => {
+      setTimeLeft(Number(remainingSeconds || 0));
+      setRemainingSeconds(Number(remainingSeconds || 0));
+      if (Number(remainingSeconds || 0) <= 0) {
+        setIsLocked(true);
+      }
+    });
+
+    socket.on("consultation-ended", () => {
+      setConsultationStatus("expired");
+      setChatReady(false);
+      setIsLocked(true);
+      setTimeLeft(0);
+      setRemainingSeconds(0);
+    });
+
+    socket.on("admin-status", ({ isOnline }) => {
+      setIsAdminOnline(Boolean(isOnline));
+    });
+
     const handleVisibility = () => {
       if (!document.hidden) {
         setUnreadCount(0);
@@ -256,6 +393,12 @@ const ChatPage = () => {
       socket.off("stop-typing");
       socket.off("message-delivered");
       socket.off("message-seen");
+      socket.off("chat-request-accepted");
+      socket.off("consultation-started");
+      socket.off("consultation-tick");
+      socket.off("consultation-ended");
+      socket.off("admin-status");
+      socket.emit("user-offline", { userId: chatUser.id });
       socket.emit("leave-room", { roomId: chatUser.id });
       socket.disconnect();
       document.removeEventListener("visibilitychange", handleVisibility);
@@ -282,39 +425,9 @@ const ChatPage = () => {
   }, [message]);
 
   useEffect(() => {
-    let timerId;
-
-    if (userPlan === "premium") {
-      setTimeLeft(0);
-      return () => {
-        if (timerId) clearInterval(timerId);
-      };
+    if (!chatReady || userPlan === "premium") {
+      return;
     }
-
-    if (userPlan === "basic") {
-      const updateTime = () => {
-        const remaining = getRemainingBasicSeconds(chatEndTime);
-        setTimeLeft(remaining);
-      };
-
-      updateTime();
-      timerId = setInterval(updateTime, 1000);
-      return () => clearInterval(timerId);
-    }
-
-    const startTime = getFreeStartTime() || setFreeStartTime();
-    const updateTime = () => {
-      const remaining = getRemainingFreeSeconds(startTime);
-      setTimeLeft(remaining);
-    };
-
-    updateTime();
-    timerId = setInterval(updateTime, 1000);
-    return () => clearInterval(timerId);
-  }, [userPlan, chatEndTime]);
-
-  useEffect(() => {
-    if (userPlan === "premium") return;
 
     if (userPlan === "basic") {
       if (timeLeft === 0 && !isLocked) {
@@ -323,10 +436,10 @@ const ChatPage = () => {
       return;
     }
 
-    if (timeLeft === 0 && !isLocked) {
+    if (timeLeft === 0 && !isLocked && consultationStatus === "live") {
       handleFreeChatEnd();
     }
-  }, [timeLeft, userPlan, isLocked]);
+  }, [timeLeft, userPlan, isLocked, chatReady, consultationStatus]);
 
   const isPremium = userPlan === "premium";
   const minutes = String(Math.floor(timeLeft / 60)).padStart(2, "0");
@@ -346,7 +459,7 @@ const ChatPage = () => {
               </div>
             </div>
             <div className="timer-box">
-              {isPremium ? "🟢 Premium Member" : `${minutes}:${seconds}`}
+              {isPremium ? "🟢 Premium Member" : consultationStatus === "live" ? `${minutes}:${seconds}` : "Waiting"}
             </div>
           </div>
 
@@ -374,6 +487,20 @@ const ChatPage = () => {
               Then tell me how I can help you today.
             </div>
 
+            {!chatReady && !isLocked && (
+              <div className="message astrologer">
+                ⏳ Waiting for admin to accept your chat request.
+                <br />
+                {isAdminOnline ? "Admin is online and will accept shortly." : "Admin is currently offline. Once they accept, your free chat will start."}
+              </div>
+            )}
+
+            {chatReady && consultationStatus === "live" && (
+              <div className="message astrologer">
+                🟢 Consultation started. Your free 2-minute consultation is now active.
+              </div>
+            )}
+
             {messages.map((msg) => (
               <div key={msg.id} className={msg.sender === "user" ? "message client" : "message astrologer"}>
                 {msg.message}
@@ -390,7 +517,7 @@ const ChatPage = () => {
             )}
           </div>
 
-          {!isLocked && (
+          {!isLocked && chatReady && (
             <div className="chat-input-area">
               <input
                 type="text"

@@ -1,6 +1,6 @@
 .testimonial-section {
   padding: 100px 20px;
-  background: var(--bg-secondary);
+  background: linear-gradient(180deg, rgba(16, 33, 58, 0.95) 0%, rgba(8, 17, 31, 0.98) 100%);
 }
 
 .testimonial-header {
@@ -21,38 +21,30 @@
 .testimonial-grid {
   max-width: 1300px;
   margin: auto;
-
   display: grid;
-  grid-template-columns:
-    repeat(auto-fit, minmax(320px, 1fr));
-
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 30px;
 }
 
 .testimonial-card {
-  background: var(--card);
-
-  border: 1px solid rgba(212,175,55,.15);
-
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.16) 0%, rgba(16, 33, 58, 0.95) 100%);
+  border: 1px solid rgba(37, 99, 235, 0.25);
   border-radius: 24px;
-
   padding: 35px;
-
   transition: .3s;
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow);
 }
 
 .testimonial-card:hover {
   transform: translateY(-8px);
-
   border-color: var(--primary);
 }
 
 .stars {
   color: var(--primary);
-
   display: flex;
   gap: 5px;
-
   margin-bottom: 20px;
 }
 
@@ -71,14 +63,9 @@
 
 .client-badge{
   display:inline-block;
-
   padding:10px 20px;
-
-  border:1px solid #d4af37;
-
+  border:1px solid rgba(37, 99, 235, 0.35);
   border-radius:999px;
-
-  color:#d4af37;
-
+  color:var(--primary);
   margin-bottom:20px;
 }

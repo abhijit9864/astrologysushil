@@ -6,11 +6,8 @@ import { MdDashboard } from "react-icons/md";
 
 const navItems = [
   { to: "/admin/dashboard", label: "Dashboard", icon: MdDashboard },
-  { to: "/admin/users", label: "Users", icon: FiUsers },
-  { to: "/admin/chats", label: "Live Chats", icon: FiMessageSquare },
-  { to: "/admin/payments", label: "Payments", icon: FiCreditCard },
+  { to: "/admin/users", label: "Leads", icon: FiUsers },
   { to: "/admin/notifications", label: "Notifications", icon: FiBell },
-  { to: "/admin/reports", label: "Reports", icon: FiBarChart2 },
   { to: "/admin/settings", label: "Settings", icon: FiSettings },
 ];
 
