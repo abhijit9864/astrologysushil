@@ -22,13 +22,15 @@ const ChatEntry = () => {
       }
     );
 
-    localStorage.setItem(
-      "chatUser",
-      JSON.stringify(formData)
-    );
+    const userPayload = {
+      id: response.data.id,
+      name: formData.name,
+      phone: formData.phone,
+    };
+
+    localStorage.setItem("chatUser", JSON.stringify(userPayload));
 
     if (response.data.exists) {
-
       if (response.data.freeChatUsed) {
         navigate("/payment");
         return;
@@ -38,12 +40,21 @@ const ChatEntry = () => {
       return;
     }
 
-    await axios.post(
+    const registerResponse = await axios.post(
       "http://localhost:5000/api/register-user",
       {
         name: formData.name,
         phone: formData.phone,
       }
+    );
+
+    localStorage.setItem(
+      "chatUser",
+      JSON.stringify({
+        id: registerResponse.data.id,
+        name: formData.name,
+        phone: formData.phone,
+      })
     );
 
     navigate("/chat");

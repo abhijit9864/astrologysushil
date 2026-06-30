@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import "../styles/chat.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import socket from "../utils/socketClient";
 
 const FREE_CHAT_DURATION = 120;
 const CHAT_START_KEY = "chatStartTime";
@@ -16,7 +17,28 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [userPlan, setUserPlan] = useState("free");
   const [chatEndTime, setChatEndTime] = useState(null);
+  const [onlineStatus, setOnlineStatus] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [messageStatuses, setMessageStatuses] = useState({});
   const timerEndHandledRef = useRef(false);
+  const typingTimeoutRef = useRef(null);
+  const chatBodyRef = useRef(null);
+  const audioRef = useRef(null);
+
+  const playNotification = () => {
+    if (audioRef.current) {
+      audioRef.current.play().catch(() => {});
+    }
+  };
+
+  const appendMessage = (newMessage) => {
+    setMessages((prev) => {
+      const exists = prev.some((msg) => msg.id === newMessage.id);
+      if (exists) return prev;
+      return [...prev, newMessage];
+    });
+  };
 
   const loadMessages = async () => {
     try {
@@ -45,7 +67,6 @@ const ChatPage = () => {
       if (data?.paid && data.plan === "premium") {
         setUserPlan("premium");
         setChatEndTime(null);
-        // After payment, keep chat locked; consultation happens via WhatsApp/phone
         setIsLocked(true);
         localStorage.removeItem(CHAT_START_KEY);
         setTimeLeft(0);
@@ -55,7 +76,6 @@ const ChatPage = () => {
       if (data?.paid && data.plan === "basic") {
         setUserPlan("basic");
         setChatEndTime(data.chat_end_time || null);
-        // After payment, keep chat locked
         setIsLocked(true);
         localStorage.removeItem(CHAT_START_KEY);
         return;
@@ -74,12 +94,29 @@ const ChatPage = () => {
     try {
       const chatUser = JSON.parse(localStorage.getItem("chatUser"));
       if (!chatUser) return;
-      await axios.post("http://localhost:5000/api/send-message", {
+
+      const response = await axios.post("http://localhost:5000/api/send-message", {
         phone: chatUser.phone,
         message,
+        sender: "user",
       });
+
+      const sent = response.data?.message;
+      if (sent) {
+        appendMessage(sent);
+        setMessageStatuses((prev) => ({ ...prev, [sent.id]: "Sent" }));
+        socket.emit("send-message", {
+          roomId: chatUser.id,
+          ...sent,
+        });
+      }
+
       setMessage("");
-      loadMessages();
+      socket.emit("stop-typing", {
+        roomId: chatUser.id,
+        sender: "user",
+        userId: chatUser.id,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -138,9 +175,111 @@ const ChatPage = () => {
   };
 
   useEffect(() => {
+    const rawUser = localStorage.getItem("chatUser");
+    if (!rawUser) return;
+
+    const chatUser = JSON.parse(rawUser);
+    if (!chatUser?.phone) return;
+
     loadChatState();
     loadMessages();
+
+    const notificationAudio = new Audio(
+      "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YRAAAAAA"
+    );
+    audioRef.current = notificationAudio;
+
+    socket.connect();
+
+    socket.on("connect", () => {
+      setOnlineStatus(true);
+      socket.emit("join-room", { roomId: chatUser.id });
+    });
+
+    socket.on("disconnect", () => setOnlineStatus(false));
+
+    socket.on("receive-message", (incoming) => {
+      if (!incoming) return;
+      appendMessage(incoming);
+      playNotification();
+      setIsTyping(false);
+      if (document.hidden) {
+        setUnreadCount((prev) => prev + 1);
+      }
+      if (incoming.sender === "admin") {
+        socket.emit("message-seen", {
+          roomId: chatUser.id,
+          messageId: incoming.id,
+          sender: "user",
+          userId: chatUser.id,
+        });
+      }
+    });
+
+    socket.on("typing", ({ sender }) => {
+      if (sender === "admin") {
+        setIsTyping(true);
+      }
+    });
+
+    socket.on("stop-typing", ({ sender }) => {
+      if (sender === "admin") {
+        setIsTyping(false);
+      }
+    });
+
+    socket.on("message-delivered", ({ messageId, sender }) => {
+      if (sender === "user") {
+        setMessageStatuses((prev) => ({ ...prev, [messageId]: "Delivered" }));
+      }
+    });
+
+    socket.on("message-seen", ({ messageId, sender }) => {
+      if (sender === "admin") {
+        setMessageStatuses((prev) => ({ ...prev, [messageId]: "Seen" }));
+      }
+    });
+
+    const handleVisibility = () => {
+      if (!document.hidden) {
+        setUnreadCount(0);
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    return () => {
+      socket.off("connect");
+      socket.off("disconnect");
+      socket.off("receive-message");
+      socket.off("typing");
+      socket.off("stop-typing");
+      socket.off("message-delivered");
+      socket.off("message-seen");
+      socket.emit("leave-room", { roomId: chatUser.id });
+      socket.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibility);
+    };
   }, []);
+
+  useEffect(() => {
+    if (!chatBodyRef.current) return;
+    chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+  }, [messages, isTyping]);
+
+  useEffect(() => {
+    if (!message.trim()) return;
+    const rawUser = localStorage.getItem("chatUser");
+    if (!rawUser) return;
+    const chatUser = JSON.parse(rawUser);
+    const roomId = chatUser.id;
+    socket.emit("typing", { roomId, sender: "user", userId: chatUser.id });
+    clearTimeout(typingTimeoutRef.current);
+    typingTimeoutRef.current = setTimeout(() => {
+      socket.emit("stop-typing", { roomId, sender: "user", userId: chatUser.id });
+    }, 1200);
+    return () => clearTimeout(typingTimeoutRef.current);
+  }, [message]);
 
   useEffect(() => {
     let timerId;
@@ -189,14 +328,6 @@ const ChatPage = () => {
     }
   }, [timeLeft, userPlan, isLocked]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      loadMessages();
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, []);
-
   const isPremium = userPlan === "premium";
   const minutes = String(Math.floor(timeLeft / 60)).padStart(2, "0");
   const seconds = String(timeLeft % 60).padStart(2, "0");
@@ -208,10 +339,10 @@ const ChatPage = () => {
         <div className="chat-container">
           <div className="chat-header">
             <div className="astrologer-info">
-              <div className="online-dot"></div>
+              <div className={`online-dot ${onlineStatus ? "online" : "offline"}`}></div>
               <div>
                 <h2>Astrologer Sushil Kumar</h2>
-                <p>Free Consultation</p>
+                <p>{onlineStatus ? "🟢 Online" : "🔴 Offline"}</p>
               </div>
             </div>
             <div className="timer-box">
@@ -219,7 +350,7 @@ const ChatPage = () => {
             </div>
           </div>
 
-          <div className={`chat-body ${isLocked ? "blur-chat" : ""}`}>
+          <div className={`chat-body ${isLocked ? "blur-chat" : ""}`} ref={chatBodyRef}>
             <div className="message astrologer">
               🙏 Namaskar! Welcome to Astrologer Sushil Kumar's Consultation.
             </div>
@@ -244,15 +375,19 @@ const ChatPage = () => {
             </div>
 
             {messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={
-                  msg.sender === "user" ? "message client" : "message astrologer"
-                }
-              >
+              <div key={msg.id} className={msg.sender === "user" ? "message client" : "message astrologer"}>
                 {msg.message}
+                {msg.sender === "user" && messageStatuses[msg.id] && (
+                  <div className="message-status">{messageStatuses[msg.id]}</div>
+                )}
               </div>
             ))}
+
+            {isTyping && <div className="typing-indicator">Astrologer is typing...</div>}
+
+            {unreadCount > 0 && (
+              <div className="unread-badge">{unreadCount} new message{unreadCount > 1 ? "s" : ""}</div>
+            )}
           </div>
 
           {!isLocked && (

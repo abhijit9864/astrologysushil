@@ -23,6 +23,7 @@ router.post("/check-user", (req, res) => {
       return res.json({
         exists: true,
         freeChatUsed: result[0].free_chat_used,
+        id: result[0].id,
       });
     }
   );
@@ -41,21 +42,23 @@ router.post("/register-user", (req, res) => {
       if (result.length > 0) {
         return res.json({
           success: true,
-          message: "User already exists"
+          message: "User already exists",
+          id: result[0].id,
         });
       }
 
       db.query(
         "INSERT INTO users(name, phone) VALUES(?, ?)",
         [name, phone],
-        (err) => {
+        (err, insertResult) => {
           if (err) {
             return res.status(500).json(err);
           }
 
           res.json({
             success: true,
-            message: "User registered"
+            message: "User registered",
+            id: insertResult.insertId,
           });
         }
       );

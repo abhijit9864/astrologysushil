@@ -1,7 +1,9 @@
 require("dotenv").config();
 
+const http = require("http");
 const express = require("express");
 const cors = require("cors");
+const { Server } = require("socket.io");
 const db = require("./config/db");
 
 const userRoutes = require("./routes/userRoutes");
@@ -18,6 +20,64 @@ app.use("/api", userRoutes);
 app.use("/api", paymentRoutes);
 app.use("/api", chatRoutes);
 app.use("/api", adminRoutes);
+
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
+    methods: ["GET", "POST"],
+  },
+});
+
+app.set("io", io);
+
+io.on("connection", (socket) => {
+  console.log("Socket connected:", socket.id);
+
+  socket.on("join-room", ({ roomId }) => {
+    if (!roomId) return;
+    const room = String(roomId);
+    socket.join(room);
+    console.log(`Socket ${socket.id} joined room ${room}`);
+  });
+
+  socket.on("leave-room", ({ roomId }) => {
+    if (!roomId) return;
+    const room = String(roomId);
+    socket.leave(room);
+    console.log(`Socket ${socket.id} left room ${room}`);
+  });
+
+  socket.on("send-message", (payload) => {
+    const { roomId, ...data } = payload || {};
+    if (!roomId) return;
+    const room = String(roomId);
+    socket.to(room).emit("receive-message", data);
+    socket.emit("message-delivered", { messageId: data.id, sender: data.sender });
+  });
+
+  socket.on("typing", ({ roomId, sender, userId }) => {
+    if (!roomId) return;
+    const room = String(roomId);
+    socket.to(room).emit("typing", { sender, userId });
+  });
+
+  socket.on("stop-typing", ({ roomId, sender, userId }) => {
+    if (!roomId) return;
+    const room = String(roomId);
+    socket.to(room).emit("stop-typing", { sender, userId });
+  });
+
+  socket.on("message-seen", ({ roomId, messageId, sender, userId }) => {
+    if (!roomId) return;
+    const room = String(roomId);
+    socket.to(room).emit("message-seen", { messageId, sender, userId });
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Socket disconnected:", socket.id);
+  });
+});
 
 function initializeDatabase() {
   const createAdminTable = `
@@ -77,6 +137,6 @@ function initializeDatabase() {
 
 initializeDatabase();
 
-app.listen(5000, () => {
+server.listen(5000, () => {
   console.log("Server Running on 5000");
 });
