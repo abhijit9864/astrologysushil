@@ -5,7 +5,7 @@ import About from "../components/About";
 import HowItWorks from "../components/HowItWorks";
 import Testimonials from "../components/Testimonials";
 import Contact from "../components/Contact";
-import Faq from "../components/Faq";
+import Faq from "../components/FAQ";
 import Footer from "../components/Footer";
 import FloatingButtons from "../components/FloatingButtons";
 
