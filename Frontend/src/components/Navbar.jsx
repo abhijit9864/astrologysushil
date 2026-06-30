@@ -1,6 +1,6 @@
 import { useState } from "react";
 import logo from "../assets/logo.png";
-import { useTheme } from "../context/ThemeContext";
+// import { useTheme } from "../context/ThemeContext";
 // import "../styles/navbar.css";
 import { Link } from "react-router-dom";
 
@@ -27,7 +27,7 @@ const Navbar = () => {
         { name: "Contact", path: "/contact" },
     ];
 
-    const { darkMode, setDarkMode } = useTheme();
+    // const { darkMode, setDarkMode } = useTheme();
 
     return (
         <>
@@ -46,12 +46,7 @@ const Navbar = () => {
             </div>
 
             {/* Main Navbar */}
-            <nav
-                className={`sticky top-0 z-50 border-b border-[#2563EB]/25 shadow-lg backdrop-blur-xl transition-all duration-300 ${darkMode
-                    ? "bg-[#08111F]/90 text-white"
-                    : "bg-[#08111F]/90 text-white"
-                    }`}
-            >
+           <nav className="sticky top-0 z-50 border-b border-[#2563EB]/25 shadow-lg backdrop-blur-xl transition-all duration-300 bg-[#08111F]/90 text-white">
 
                 <div className="max-w-7xl mx-auto px-4">
 
@@ -133,10 +128,7 @@ const Navbar = () => {
 
                     {/* Menu Bar Desktop */}
                     <div className="hidden lg:flex justify-center border-t border-[#2563EB]/20 hover:text-[#D4AF37] hover:-translate-y-1 transition-all duration-300">
-                        <ul
-                            className={`flex gap-10 py-4 font-medium ${darkMode ? "text-white" : "text-black"
-                                }`}
-                        >
+                        <ul className="flex gap-10 py-4 font-medium text-white">
 
                             {navLinks.map((item) => (
                                 <li
@@ -155,7 +147,7 @@ const Navbar = () => {
                 {/* Mobile Menu */}
                 {isOpen && (
                     <div className="lg:hidden bg-[#08111F]/95 border-t border-[#2563EB]/20">
-                        <ul className={`flex flex-col gap-5 p-5 ${darkMode ? "text-white" : "text-black"}`}>
+                        <ul className="flex flex-col gap-5 p-5 text-white">
 
                             {navLinks.map((item) => (
                                 <li
