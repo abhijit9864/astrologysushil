@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import "../styles/consultation.css";
 import axios from "axios";
 import Swal from "sweetalert2";
+import API_BASE_URL from "../config/api";
 
 const Consultation = () => {
   const [formData, setFormData] = useState({
@@ -26,7 +27,7 @@ const Consultation = () => {
     setSubmitting(true);
 
     try {
-      const response = await axios.post("/api/consultation-request", {
+      const response = await axios.post(`${API_BASE_URL}/api/consultation-request`, {
         name: formData.name,
         phone: formData.phone,
         dob: formData.dob,
