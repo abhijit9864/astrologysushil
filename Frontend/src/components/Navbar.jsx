@@ -1,20 +1,7 @@
 import { useState } from "react";
 import logo from "../assets/logo.png";
-// import { useTheme } from "../context/ThemeContext";
-// import "../styles/navbar.css";
 import { Link } from "react-router-dom";
-
-import {
-    FaPhoneAlt,
-    FaWhatsapp,
-    FaBars,
-    FaTimes,
-    FaMapMarkerAlt,
-    FaClock,
-    FaMoon,
-    FaSun,
-} from "react-icons/fa";
-
+import { FaPhoneAlt, FaBars, FaTimes } from "react-icons/fa";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -27,164 +14,59 @@ const Navbar = () => {
         { name: "Contact", path: "/contact" },
     ];
 
-    // const { darkMode, setDarkMode } = useTheme();
-
     return (
-        <>
-            {/* Top Bar */} <div className="bg-[#1E3A8A] text-white"> <div className="max-w-7xl mx-auto px-4 py-2 flex flex-col md:flex-row justify-between items-center gap-2 text-sm font-medium"> <div className="flex items-center gap-2"> <FaPhoneAlt /> <span>+91 7377237360</span> </div>
+        <header className="sticky top-0 z-50 border-b border-[#efe6d7] bg-[#fffdfa]/90 backdrop-blur-xl">
+            <div className="section-shell">
+                <div className="flex items-center justify-between py-4 lg:py-5">
+                    <Link to="/" className="flex items-center gap-3">
+                        <img src={logo} alt="Astrology Logo" className="h-16 w-16 rounded-full border border-[#efe6d7] object-contain bg-white p-1 shadow-sm" />
+                        <div>
+                            <h1 className="text-xl font-semibold tracking-[0.25em] text-[#6b3418]">VEDIC JYOTISH</h1>
+                            <p className="text-sm text-[#8b5e3c]">Astrologer Pandit Sushil</p>
+                        </div>
+                    </Link>
 
-                <div className="flex items-center gap-2">
-                    <FaClock />
-                    <span>Mon - Sun : 8:00 AM - 9:00 PM</span>
-                </div>
+                    <nav className="hidden lg:flex items-center gap-8">
+                        {navLinks.map((item) => (
+                            <Link key={item.name} to={item.path} className="text-sm font-medium text-[#6b7280] transition duration-300 hover:text-[#6b3418] relative after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-[#c9a227] after:transition-all after:duration-300 hover:after:w-full">
+                                {item.name}
+                            </Link>
+                        ))}
+                    </nav>
 
-                <div className="flex items-center gap-2">
-                    <FaMapMarkerAlt />
-                    <span>Kalyan Nagar, Cuttack</span>
+                    <div className="hidden lg:flex items-center gap-3">
+                        <a href="tel:+917377237360" className="flex items-center gap-2 rounded-full border border-[#6b3418] px-4 py-2.5 text-sm font-semibold text-[#6b3418] transition hover:bg-[#6b3418] hover:text-white">
+                            <FaPhoneAlt className="text-[#c9a227]" /> Call
+                        </a>
+                        <Link to="/consultation" className="rounded-full bg-[#6b3418] px-5 py-2.5 text-sm font-semibold text-white shadow-[0_10px_30px_rgba(107,52,24,0.16)] transition hover:bg-[#4d2310]">
+                            Book Consultation
+                        </Link>
+                    </div>
+
+                    <button className="rounded-full border border-[#efe6d7] bg-white p-3 text-[#6b3418] lg:hidden" onClick={() => setIsOpen(!isOpen)}>
+                        {isOpen ? <FaTimes /> : <FaBars />}
+                    </button>
                 </div>
             </div>
-            </div>
 
-            {/* Main Navbar */}
-           <nav className="sticky top-0 z-50 border-b border-[#2563EB]/25 shadow-lg backdrop-blur-xl transition-all duration-300 bg-[#08111F]/90 text-white">
-
-                <div className="max-w-7xl mx-auto px-4">
-
-                    {/* Upper Section */}
-                    <div className="flex justify-between items-center py-2">
-
-                        {/* Logo Section */}
-                        <div className="flex items-center gap-4">
-
-                            <img
-                                src={logo}
-                                alt="Astrology Logo"
-                                className="w-20 h-20 md:w-24 md:h-24 object-contain"
-                            />
-
-                            <div>
-                                <h1 className="text-3xl font-bold text-[#D4AF37] tracking-wide">
-                                    VEDIC JYOTISH
-                                </h1>
-
-                                <p className="text-[#CBD5E1] text-sm">
-                                    Astrologer Pandit Sushil
-                                </p>
-
-                                <p className="text-[#D4AF37] text-sm mt-1">
-                                    ॥ ज्योतिषं वेदचक्षुः ॥
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Right Section Desktop */}
-                        <div className="hidden lg:flex items-center gap-5">
-
-                            <div className="text-right">
-                                <p className="text-[#CBD5E1] text-sm">
-                                    For Consultation
-                                </p>
-
-                                <h3 className="text-[#D4AF37] text-lg font-semibold">
-                                    +91 7377237360
-                                </h3>
-
-                                <p className="text-[#CBD5E1] text-xs">
-                                    Mon - Sun : 8AM - 9PM
-                                </p>
-                            </div>
-                            {/* <button
-                                onClick={() => setDarkMode(!darkMode)}
-                                className="w-12 h-12 rounded-full border border-[#D4AF37] text-[#D4AF37] flex items-center justify-center hover:bg-[#2563EB] hover:text-white transition"
-
-                            >
-
-                                {darkMode ? <FaSun /> : <FaMoon />} </button> */}
-
-
-                            <a
-                                href="tel:+917377237360"
-                                className="border border-[#D4AF37] text-[#D4AF37] px-5 py-3 rounded-full hover:bg-[#2563EB] hover:text-white transition"
-                            >
-                                Call Now
-                            </a>
-
-                            <Link
-                                to="/consultation"
-                                className="bg-[#2563EB] text-white px-5 py-3 rounded-full font-semibold border border-[#D4AF37]"
-                            >
-                                Book Consultation
+            {isOpen && (
+                <div className="border-t border-[#efe6d7] bg-[#fffdfa]/95 px-4 py-5 lg:hidden">
+                    <div className="section-shell flex flex-col gap-4">
+                        {navLinks.map((item) => (
+                            <Link key={item.name} to={item.path} className="text-base font-medium text-[#2b2b2b]" onClick={() => setIsOpen(false)}>
+                                {item.name}
                             </Link>
-                        </div>
-
-                        {/* Mobile Toggle */}
-                        <button
-                            className="lg:hidden text-[#D4AF37] text-2xl"
-                            onClick={() => setIsOpen(!isOpen)}
-                        >
-                            {isOpen ? <FaTimes /> : <FaBars />}
-                        </button>
-                    </div>
-
-                    {/* Menu Bar Desktop */}
-                    <div className="hidden lg:flex justify-center border-t border-[#2563EB]/20 hover:text-[#D4AF37] hover:-translate-y-1 transition-all duration-300">
-                        <ul className="flex gap-10 py-4 font-medium text-white">
-
-                            {navLinks.map((item) => (
-                                <li
-                                    key={item.name}
-                                    className="cursor-pointer hover:text-[#D4AF37] transition duration-300"
-                                >
-                                    <Link to={item.path}>
-                                        {item.name}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
+                        ))}
+                        <a href="tel:+917377237360" className="flex items-center justify-center gap-2 rounded-full border border-[#6b3418] px-4 py-3 text-sm font-semibold text-[#6b3418]">
+                            <FaPhoneAlt /> Call Now
+                        </a>
+                        <Link to="/consultation" className="rounded-full bg-[#6b3418] px-4 py-3 text-center text-sm font-semibold text-white" onClick={() => setIsOpen(false)}>
+                            Book Consultation
+                        </Link>
                     </div>
                 </div>
-
-                {/* Mobile Menu */}
-                {isOpen && (
-                    <div className="lg:hidden bg-[#08111F]/95 border-t border-[#2563EB]/20">
-                        <ul className="flex flex-col gap-5 p-5 text-white">
-
-                            {navLinks.map((item) => (
-                                <li
-                                    key={item.name}
-                                    className="hover:text-[#D4AF37] cursor-pointer"
-                                >
-                                    <Link
-                                        to={item.path}
-                                        onClick={() => setIsOpen(false)}
-                                    >
-                                        {item.name}
-                                    </Link>
-                                </li>
-                            ))}
-
-                            <Link
-                                to="/consultation"
-                                className="bg-[#2563EB] text-white px-5 py-3 rounded-full font-semibold hover:scale-105 transition border border-[#D4AF37]"
-                            >
-                                Book Consultation
-                            </Link>
-
-                            <a
-                                href="tel:+917377237360"
-                                className="border border-[#D4AF37] text-[#D4AF37] text-center py-3 rounded-lg"
-                            >
-                                Call Now
-                            </a>
-
-                            <button className="bg-[#2563EB] text-white py-3 rounded-lg font-semibold border border-[#D4AF37]">
-                                Book Consultation
-                            </button>
-                        </ul>
-                    </div>
-                )}
-            </nav>
-        </>
+            )}
+        </header>
     );
 };
 

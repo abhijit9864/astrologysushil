@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import axios from "axios";
 import API_BASE_URL from "../../config/api";
-import { FiBarChart2, FiBell, FiCreditCard, FiLogOut, FiMessageSquare, FiSearch, FiSettings, FiUsers } from "react-icons/fi";
+import { FiBell, FiLogOut, FiSearch, FiSettings, FiUsers } from "react-icons/fi";
 import { MdDashboard } from "react-icons/md";
 
 const navItems = [
@@ -37,12 +37,12 @@ export default function AdminLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="min-h-screen bg-[#fdfbf7] text-[#2b2b2b]">
       <div className="flex min-h-screen">
-        <aside className="hidden w-72 flex-col border-r border-slate-800 bg-slate-900/90 p-6 lg:flex">
+        <aside className="hidden w-72 flex-col border-r border-[#efe6d7] bg-[#fffdfa]/95 p-6 shadow-sm lg:flex">
           <div className="mb-8">
-            <h2 className="text-xl font-semibold">Astro Admin</h2>
-            <p className="text-sm text-slate-400">Control Center</p>
+            <h2 className="text-xl font-semibold text-[#6b3418]">Astro Admin</h2>
+            <p className="text-sm text-[#6b7280]">Control Center</p>
           </div>
 
           <nav className="space-y-2">
@@ -50,7 +50,7 @@ export default function AdminLayout() {
               <NavLink
                 key={to}
                 to={to}
-                className={({ isActive }) => `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${isActive ? "bg-cyan-500/20 text-cyan-300" : "text-slate-300 hover:bg-slate-800 hover:text-white"}`}
+                className={({ isActive }) => `flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition ${isActive ? "bg-[#6b3418] text-white" : "text-[#6b7280] hover:bg-[#f8f2e9] hover:text-[#6b3418]"}`}
               >
                 <Icon className="text-lg" />
                 {label}
@@ -58,30 +58,30 @@ export default function AdminLayout() {
             ))}
           </nav>
 
-          <button onClick={handleLogout} className="mt-auto flex items-center gap-3 rounded-xl border border-slate-700 px-4 py-3 text-sm text-slate-300 transition hover:bg-slate-800">
+          <button onClick={handleLogout} className="mt-auto flex items-center gap-3 rounded-xl border border-[#efe6d7] px-4 py-3 text-sm text-[#6b3418] transition hover:bg-[#f8f2e9]">
             <FiLogOut />
             Logout
           </button>
         </aside>
 
         <main className="flex-1">
-          <header className="border-b border-slate-800 bg-slate-900/70 px-4 py-4 sm:px-6">
+          <header className="border-b border-[#efe6d7] bg-[#fffdfa]/90 px-4 py-4 sm:px-6">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div>
-                <h1 className="text-2xl font-semibold">Welcome back, {admin.name}</h1>
-                <p className="text-sm text-slate-400">{new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</p>
+                <h1 className="text-2xl font-semibold text-[#2b2b2b]">Welcome back, {admin.name}</h1>
+                <p className="text-sm text-[#6b7280]">{new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</p>
               </div>
               <div className="flex items-center gap-3">
-                <label className="flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-slate-400">
+                <label className="flex items-center gap-2 rounded-xl border border-[#efe6d7] bg-[#fcf5ea] px-3 py-2 text-sm text-[#6b7280]">
                   <FiSearch />
                   <input className="bg-transparent outline-none" placeholder="Search" />
                 </label>
-                <div className="rounded-xl border border-slate-700 bg-slate-950 p-2 text-slate-300">🔔</div>
-                <div className="flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-950 px-3 py-2">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-500 font-semibold text-slate-950">A</div>
+                <div className="rounded-xl border border-[#efe6d7] bg-[#fcf5ea] p-2 text-[#6b3418]">🔔</div>
+                <div className="flex items-center gap-2 rounded-xl border border-[#efe6d7] bg-[#fcf5ea] px-3 py-2">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#6b3418] font-semibold text-white">A</div>
                   <div>
-                    <p className="text-sm font-semibold">{admin.name}</p>
-                    <p className="text-xs text-slate-400">Administrator</p>
+                    <p className="text-sm font-semibold text-[#2b2b2b]">{admin.name}</p>
+                    <p className="text-xs text-[#6b7280]">Administrator</p>
                   </div>
                 </div>
               </div>

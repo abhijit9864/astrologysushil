@@ -28,36 +28,36 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center px-4">
-      <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900/80 p-8 shadow-2xl">
+    <div className="flex min-h-screen items-center justify-center bg-[#fdfbf7] px-4 text-[#2b2b2b]">
+      <div className="w-full max-w-md rounded-2xl border border-[#efe6d7] bg-[#fffdfa] p-8 shadow-[0_20px_60px_rgba(107,52,24,0.08)]">
         <div className="mb-6 text-center">
-          <h1 className="text-3xl font-semibold">Admin Access</h1>
-          <p className="mt-2 text-sm text-slate-400">Securely manage consultations, users, payments, and chats.</p>
+          <h1 className="text-3xl font-semibold text-[#6b3418]">Admin Access</h1>
+          <p className="mt-2 text-sm text-[#6b7280]">Securely manage consultations, users, payments, and chats.</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="mb-2 block text-sm text-slate-300">Email</label>
+            <label className="mb-2 block text-sm text-[#6b3418]">Email</label>
             <input
               required
               type="email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 outline-none ring-0"
+              className="w-full rounded-xl border border-[#efe6d7] bg-[#fcf5ea] px-4 py-3 outline-none ring-0"
               placeholder="admin@example.com"
             />
           </div>
           <div>
-            <label className="mb-2 block text-sm text-slate-300">Password</label>
+            <label className="mb-2 block text-sm text-[#6b3418]">Password</label>
             <input
               required
               type="password"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
-              className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 outline-none ring-0"
+              className="w-full rounded-xl border border-[#efe6d7] bg-[#fcf5ea] px-4 py-3 outline-none ring-0"
               placeholder="Enter password"
             />
           </div>
-          <button disabled={loading} className="w-full rounded-xl bg-cyan-500 px-4 py-3 font-semibold text-slate-950 transition hover:bg-cyan-400 disabled:opacity-70">
+          <button disabled={loading} className="w-full rounded-xl bg-[#6b3418] px-4 py-3 font-semibold text-white transition hover:bg-[#4d2310] disabled:opacity-70">
             {loading ? "Signing in..." : "Login"}
           </button>
         </form>

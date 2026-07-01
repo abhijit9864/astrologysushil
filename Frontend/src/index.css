@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "./styles/theme.css";
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Playfair+Display:wght@600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap");
 
 * {
   box-sizing: border-box;
@@ -12,10 +13,10 @@ html {
 body {
   margin: 0;
   padding: 0;
-  font-family: "Poppins", sans-serif;
+  font-family: "Poppins", "Segoe UI", sans-serif;
   background:
-    radial-gradient(circle at top left, rgba(37, 99, 235, 0.2), transparent 32%),
-    linear-gradient(135deg, var(--bg) 0%, #0d1830 100%);
+    radial-gradient(circle at top left, rgba(201, 162, 39, 0.14), transparent 30%),
+    linear-gradient(135deg, #fdfbf7 0%, #fff8f0 100%);
   color: var(--text);
   transition: all 0.3s ease;
 }
@@ -31,15 +32,18 @@ h4,
 h5,
 h6 {
   color: var(--text);
+  font-family: "Cormorant Garamond", "Playfair Display", serif;
+  letter-spacing: -0.01em;
 }
 
 p {
   color: var(--text-secondary);
+  line-height: 1.8;
 }
 
 ::selection {
-  background: rgba(37, 99, 235, 0.35);
-  color: white;
+  background: rgba(201, 162, 39, 0.24);
+  color: #2b2b2b;
 }
 
 ::-webkit-scrollbar {
@@ -47,18 +51,74 @@ p {
 }
 
 ::-webkit-scrollbar-track {
-  background: #08111F;
+  background: #f7efe2;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+  background: linear-gradient(180deg, var(--secondary) 0%, var(--primary) 100%);
   border-radius: 999px;
 }
 
-.glass-card {
+.premium-card {
   background: var(--card);
   border: 1px solid var(--border-color);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
   box-shadow: var(--shadow);
+}
+
+.soft-ring {
+  box-shadow: 0 0 0 1px rgba(107, 52, 24, 0.1);
+}
+
+.section-shell {
+  @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, var(--secondary) 0%, var(--primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-glow {
+  background: radial-gradient(circle, rgba(201, 162, 39, 0.2), transparent 65%);
+}
+
+.hero-wheel {
+  animation: rotateWheel 36s linear infinite;
+  filter: drop-shadow(0 0 18px rgba(201, 162, 39, 0.18));
+  z-index: 10;
+}
+
+.hero-portrait-shell {
+  display: none;
+}
+
+.hero-portrait-aura {
+  display: none;
+}
+
+.lotus-pattern {
+  background-image: radial-gradient(circle, rgba(107, 52, 24, 0.04) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+@keyframes rotateWheel {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes pulseAura {
+  0% {
+    transform: translate(-50%, -50%) scale(0.94);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.06);
+    opacity: 0.95;
+  }
 }

@@ -67,36 +67,36 @@ const Consultation = () => {
     <>
       <Navbar />
       <section className="cp-page">
-        <div className="mx-auto max-w-6xl rounded-[32px] border border-[rgba(37,99,235,0.25)] bg-[rgba(16,33,58,0.9)] p-6 shadow-[0_20px_60px_rgba(3,12,28,0.4)] backdrop-blur-xl sm:p-10">
+        <div className="mx-auto max-w-6xl rounded-[32px] border border-[#efe6d7] bg-[#fffdfa] p-6 shadow-[0_20px_60px_rgba(107,52,24,0.08)] backdrop-blur-xl sm:p-10">
           <div className="mb-8 text-center">
-            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">Consultation Form</p>
-            <h1 className="text-3xl font-semibold text-white sm:text-4xl">Book a premium astrology consultation</h1>
-            <p className="mx-auto mt-4 max-w-2xl text-[#BBBBBB]">Share your details and we will connect with you on WhatsApp for a calm, personal consultation.</p>
+            <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-[#c9a227]">Consultation Form</p>
+            <h1 className="text-3xl font-semibold text-[#2b2b2b] sm:text-4xl">Book a premium astrology consultation</h1>
+            <p className="mx-auto mt-4 max-w-2xl text-[#6b7280]">Share your details and we will connect with you on WhatsApp for a calm, personal consultation.</p>
           </div>
 
           <form className="grid gap-4 md:grid-cols-2" onSubmit={handleSubmit}>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-[#D4AF37]">Name</label>
+              <label className="text-sm font-medium text-[#6b3418]">Name</label>
               <input className="cp-input" name="name" value={formData.name} onChange={handleChange} placeholder="Enter your full name" required />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-[#D4AF37]">Phone</label>
+              <label className="text-sm font-medium text-[#6b3418]">Phone</label>
               <input className="cp-input" name="phone" value={formData.phone} onChange={handleChange} placeholder="Enter your phone number" required />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-[#D4AF37]">Date of Birth</label>
+              <label className="text-sm font-medium text-[#6b3418]">Date of Birth</label>
               <input className="cp-input" type="date" name="dob" value={formData.dob} onChange={handleChange} required />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-[#D4AF37]">Time of Birth</label>
+              <label className="text-sm font-medium text-[#6b3418]">Time of Birth</label>
               <input className="cp-input" type="time" name="birthTime" value={formData.birthTime} onChange={handleChange} required />
             </div>
             <div className="space-y-2 md:col-span-2">
-              <label className="text-sm font-medium text-[#D4AF37]">Place of Birth</label>
+              <label className="text-sm font-medium text-[#6b3418]">Place of Birth</label>
               <input className="cp-input" name="birthPlace" value={formData.birthPlace} onChange={handleChange} placeholder="City or town of birth" required />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-[#D4AF37]">Select Service</label>
+              <label className="text-sm font-medium text-[#6b3418]">Select Service</label>
               <select className="cp-input" name="service" value={formData.service} onChange={handleChange} required>
                 <option value="">Select a service</option>
                 <option value="Career">Career</option>
@@ -113,11 +113,11 @@ const Consultation = () => {
               </select>
             </div>
             <div className="space-y-2 md:col-span-2">
-              <label className="text-sm font-medium text-[#D4AF37]">Problem</label>
+              <label className="text-sm font-medium text-[#6b3418]">Problem</label>
               <textarea className="cp-input min-h-[140px]" name="problem" value={formData.problem} onChange={handleChange} placeholder="Describe your concern and what guidance you need" required />
             </div>
             <div className="md:col-span-2">
-              <button type="submit" disabled={submitting} className="w-full rounded-full bg-[#D4AF37] px-6 py-3 font-semibold text-black transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-70">
+              <button type="submit" disabled={submitting} className="w-full rounded-full bg-[#6b3418] px-6 py-3 font-semibold text-white transition hover:bg-[#4d2310] disabled:cursor-not-allowed disabled:opacity-70">
                 {submitting ? "Submitting..." : "Submit Consultation Request"}
               </button>
             </div>

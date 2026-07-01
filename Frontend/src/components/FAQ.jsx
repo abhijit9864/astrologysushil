@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { FaPlus, FaMinus } from "react-icons/fa";
-import "../styles/faq.css";
 
 const FAQ = () => {
   const [active, setActive] = useState(0);
@@ -29,50 +28,31 @@ const FAQ = () => {
   ];
 
   return (
-    <section className="faq-section">
+    <section className="bg-white py-20 sm:py-24">
+      <div className="section-shell">
+        <div className="mb-10 text-center">
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">Frequently Asked Questions</p>
+          <h2 className="text-3xl font-semibold text-slate-900 sm:text-4xl">Have Questions? We Have Answers</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-600">Find answers to the most common questions about our astrology services.</p>
+        </div>
 
-      <div className="faq-header">
-        <span className="faq-badge">
-          Frequently Asked Questions
-        </span>
-
-        <h2>
-          Have Questions? We Have Answers
-        </h2>
-
-        <p>
-          Find answers to the most common questions about our astrology services.
-        </p>
-      </div>
-
-      <div className="faq-container">
-        {faqs.map((faq, index) => (
-          <div
-            key={index}
-            className={`faq-item ${active === index ? "active" : ""}`}
-          >
-            <button
-              className="faq-question"
-              onClick={() =>
-                setActive(active === index ? null : index)
-              }
-            >
-              <span>{faq.question}</span>
-
-              <div className="faq-icon">
-                {active === index ? <FaMinus /> : <FaPlus />}
+        <div className="mx-auto max-w-3xl space-y-3">
+          {faqs.map((faq, index) => {
+            const isOpen = active === index;
+            return (
+              <div key={index} className="rounded-[20px] border border-slate-200 bg-[#F8FAFC] p-4 shadow-sm">
+                <button className="flex w-full items-center justify-between gap-3 text-left" onClick={() => setActive(isOpen ? null : index)}>
+                  <span className="font-semibold text-slate-900">{faq.question}</span>
+                  <div className="rounded-full bg-white p-2 text-[#1E40AF]">
+                    {isOpen ? <FaMinus /> : <FaPlus />}
+                  </div>
+                </button>
+                {isOpen && <p className="mt-3 text-sm leading-7 text-slate-600">{faq.answer}</p>}
               </div>
-            </button>
-
-            {active === index && (
-              <div className="faq-answer">
-                <p>{faq.answer}</p>
-              </div>
-            )}
-          </div>
-        ))}
+            );
+          })}
+        </div>
       </div>
-
     </section>
   );
 };

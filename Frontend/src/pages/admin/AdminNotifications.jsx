@@ -104,44 +104,44 @@ export default function AdminNotifications() {
 
   return (
     <div className="grid gap-6 xl:grid-cols-[1fr_1fr]">
-      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-        <h2 className="text-xl font-semibold">Send Notification</h2>
+      <div className="rounded-2xl border border-[#efe6d7] bg-[#fffdfa] p-6 shadow-[0_16px_40px_rgba(107,52,24,0.06)]">
+        <h2 className="text-xl font-semibold text-[#2b2b2b]">Send Notification</h2>
         <form onSubmit={handleSend} className="mt-4 space-y-4">
-          <input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Title" className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 outline-none" />
-          <textarea required value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Message" rows="4" className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 outline-none" />
-          <select value={form.target} onChange={(e) => setForm({ ...form, target: e.target.value })} className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 outline-none">
+          <input required value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Title" className="w-full rounded-xl border border-[#efe6d7] bg-[#fcf5ea] px-3 py-2 outline-none" />
+          <textarea required value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Message" rows="4" className="w-full rounded-xl border border-[#efe6d7] bg-[#fcf5ea] px-3 py-2 outline-none" />
+          <select value={form.target} onChange={(e) => setForm({ ...form, target: e.target.value })} className="w-full rounded-xl border border-[#efe6d7] bg-[#fcf5ea] px-3 py-2 outline-none">
             <option value="all">All Users</option>
             <option value="premium">Premium Users</option>
             <option value="basic">Basic Users</option>
           </select>
-          <button className="rounded-xl bg-cyan-500 px-4 py-2 font-semibold text-slate-950">Send</button>
+          <button className="rounded-xl bg-[#6b3418] px-4 py-2 font-semibold text-white">Send</button>
         </form>
       </div>
-      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+      <div className="rounded-2xl border border-[#efe6d7] bg-[#fffdfa] p-6 shadow-[0_16px_40px_rgba(107,52,24,0.06)]">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold">Pending Chat Requests</h3>
-          <span className="rounded-full bg-cyan-500/20 px-3 py-1 text-xs text-cyan-300">{pendingRequests.length}</span>
+          <h3 className="text-lg font-semibold text-[#2b2b2b]">Pending Chat Requests</h3>
+          <span className="rounded-full bg-[#fff8f0] px-3 py-1 text-xs text-[#6b3418]">{pendingRequests.length}</span>
         </div>
         <div className="mt-4 space-y-3">
-          {pendingRequests.length === 0 && <p className="text-sm text-slate-400">No pending chat requests right now.</p>}
+          {pendingRequests.length === 0 && <p className="text-sm text-[#6b7280]">No pending chat requests right now.</p>}
           {pendingRequests.map((request) => (
-            <div key={request.userId} className="rounded-xl border border-cyan-500/20 bg-slate-950 p-4">
-              <p className="font-medium text-slate-100">{request.userName || "New user"}</p>
-              <p className="mt-1 text-sm text-slate-400">{request.phone || "No phone number"}</p>
-              <button type="button" onClick={() => openChatRequest(request)} className="mt-3 rounded-lg bg-cyan-500 px-3 py-2 text-sm font-semibold text-slate-950">
+            <div key={request.userId} className="rounded-xl border border-[#efe6d7] bg-[#fcf5ea] p-4">
+              <p className="font-medium text-[#2b2b2b]">{request.userName || "New user"}</p>
+              <p className="mt-1 text-sm text-[#6b7280]">{request.phone || "No phone number"}</p>
+              <button type="button" onClick={() => openChatRequest(request)} className="mt-3 rounded-lg bg-[#6b3418] px-3 py-2 text-sm font-semibold text-white">
                 Open Chat
               </button>
             </div>
           ))}
         </div>
 
-        <h3 className="mt-6 text-lg font-semibold">Recent Notifications</h3>
+        <h3 className="mt-6 text-lg font-semibold text-[#2b2b2b]">Recent Notifications</h3>
         <div className="mt-4 space-y-3">
           {notifications.map((item) => (
-            <div key={item.id} className="rounded-xl border border-slate-800 bg-slate-950 p-4">
-              <p className="font-medium">{item.title}</p>
-              <p className="mt-1 text-sm text-slate-400">{item.message}</p>
-              <p className="mt-2 text-xs text-slate-500">Target: {item.target}</p>
+            <div key={item.id} className="rounded-xl border border-[#efe6d7] bg-[#fcf5ea] p-4">
+              <p className="font-medium text-[#2b2b2b]">{item.title}</p>
+              <p className="mt-1 text-sm text-[#6b7280]">{item.message}</p>
+              <p className="mt-2 text-xs text-[#6b7280]">Target: {item.target}</p>
             </div>
           ))}
         </div>
