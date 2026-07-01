@@ -11,7 +11,7 @@ const About = () => {
 
         <div className="about-content">
           <span className="about-badge">About Pandit Ji</span>
-          <h2 className="about-title">Pandit Sushil Kumar</h2>
+          <h2 className="about-title">Pandit Sushil Mohapatra</h2>
           <p className="about-description">With more than two decades of experience in Vedic astrology, Kundali analysis, Vastu and spiritual guidance, Pandit Sushil Kumar offers thoughtful, practical and premium consultations that help people move forward with clarity.</p>
 
           <div className="about-features">
